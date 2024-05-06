@@ -9,15 +9,20 @@ const MemoryGame = ({ cardCount, row }) => {
   useEffect(() => {
     const initializeCards = () => {
       const newCards = [];
-      for (let i = 0; i < cardCount; i++) {
-        newCards.push({ number: i + 1, isBack: true, isMatched: false });
+      for (let i = 1; i <= cardCount / 2; i++) {
+        newCards.push({ number: i, isBack: true, isMatched: false });
+        newCards.push({ number: i, isBack: true, isMatched: false });
+      }
+      for (let i = newCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newCards[i], newCards[j]] = [newCards[j], newCards[i]];
       }
       setCards(newCards);
     };
-
+  
     initializeCards();
   }, [cardCount]);
-
+  
   const handleCardClick = (index, number) => {
     if (pair < 0) {
       setPair(number);
@@ -25,23 +30,29 @@ const MemoryGame = ({ cardCount, row }) => {
       const newCards = [...cards];
       newCards[index].isBack = false;
       setCards(newCards);
-    } else {
+    } 
+    else {
       if (pair === number && pairIndex !== index) {
         // Matching
         const newCards = [...cards];
         newCards[index].isMatched = true;
         newCards[pairIndex].isMatched = true;
+        newCards[index].isBack = false;
         setCards(newCards);
         setPair(-1);
         setPairIndex(-1);
       } else if (pairIndex !== index) {
         // Not matching
         const newCards = [...cards];
-        newCards[index].isBack = true;
-        newCards[pairIndex].isBack = true;
+        newCards[index].isBack = false;
         setCards(newCards);
-        setPair(-1);
-        setPairIndex(-1);
+        setTimeout(() => {
+          newCards[index].isBack = true;
+          newCards[pairIndex].isBack = true;
+          setCards(newCards);
+          setPair(-1);
+          setPairIndex(-1);
+        }, 700);
       }
     }
   };

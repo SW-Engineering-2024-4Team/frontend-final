@@ -1,19 +1,22 @@
 import React from 'react';
+import './card.css';
 
 const Card = ({ number, index, isBack, isMatched, onClick }) => {
   const handleClick = () => {
-    if (isBack) {
-      onClick(index, number);
-    }
+    onClick(index, number);
   };
+  
+  const cardClass = `card ${isBack ? 'back' : 'front'} ${isMatched ? 'matched' : ''}`;
 
   return (
     <div
-      className={`card ${isBack ? 'back' : 'front'} ${isMatched ? 'matched' : ''}`}
+      className={cardClass}
       onClick={handleClick}
       data-number={`🧡${number}`}
       data-index={index}
-    ></div>
+    >
+      <div className="card-content">{isBack ? null : `🧡${number}`}</div>
+    </div>
   );
 };
 
