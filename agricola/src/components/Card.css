@@ -1,0 +1,67 @@
+.placeholder {
+    display: grid;
+    grid-template-columns: repeat(var(--row), 150px);
+    gap: 20px;
+    perspective: 800px;
+}
+
+.placeholder > .card {
+    background-image: url('./cardbg.jpg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 140px;
+    height: 200px;
+    transform-style: preserve-3d;
+    perspective: 400px;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    text-align: center;
+}
+
+.placeholder > .card::before {
+    visibility: hidden;
+    content: attr(data-number);
+    position: absolute;
+    font-size: 5em;
+    line-height: 1.125;
+    font-weight: bold;
+    top: 50%;
+    transform: rotateY(180deg) translate(50%, -50%);
+    backface-visibility: hidden;
+    background-color: #e8e8e8;
+    color: #444;
+    width: 100%;
+    height: 100%;
+}
+
+.placeholder .card.back {
+    transition: transform .5s;
+    transform: rotateY(0deg);
+}
+
+.placeholder .card.front {
+    display: block;
+    transition: transform .5s;
+    transform: rotateY(180deg);
+}
+
+.placeholder .card.front::before {
+    visibility: visible;
+}
+
+.placeholder .card.matched:before {
+    background-color: #673ab7;
+    color: #fff;
+}
+
+.placeholder > .card.back:hover {
+    transform: scale(1.1);
+    transition: transform 0.1s linear;
+    box-shadow: 1px 4px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+input[type=button] {
+    padding: 5px 20px;
+    margin: 20px;
+}
