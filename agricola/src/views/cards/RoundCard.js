@@ -1,24 +1,26 @@
 import React from 'react';
+import './RoundCard.css';
 
-const RoundCard = ({ cardName, index, isBack, isMatched, onClick }) => {
+const Card = ({ number, index, isBack, onClick }) => {
   const handleClick = () => {
-    onClick(index, cardName);
+    onClick(index, number);
   };
   
-  const cardClass = `card ${isBack ? 'back' : 'front'} ${isMatched ? 'matched' : ''}`;
+  const cardClass = `card ${isBack ? 'back' : 'front'} `;
+  const imagePath = isBack ? `../../components/cardbg.jpg` : `../../image/RoundCard/round${number}.png`;
 
   return (
     <div
       className={cardClass}
       onClick={handleClick}
-      data-name={cardName}
+      data-number={number}
       data-index={index}
     >
       <div className="card-content">
-        {isBack ? null : <img src={require(`../../image/RoundCard/${cardName}.png`).default} alt={cardName} />}
+        {isBack ? null : <img src={imagePath} alt={`Round ${number}`} />}
       </div>
     </div>
   );
 };
 
-export default RoundCard;
+export default Card;

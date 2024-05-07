@@ -14,7 +14,7 @@ import PlayerBoard from '../../views/boards/PlayerBoard'
 
 const Game = () => {
   const cardCount = 6;
-  const row = 2;
+  const row = 3;
 
   return (
     <ApexChartWrapper>
