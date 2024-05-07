@@ -1,27 +1,24 @@
 import React from 'react';
 
-// MUI 불러오기
-import Card from '@mui/material/Card'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import CardActions from '@mui/material/CardActions'
+const RoundCard = ({ cardName, index, isBack, isMatched, onClick }) => {
+  const handleClick = () => {
+    onClick(index, cardName);
+  };
+  
+  const cardClass = `card ${isBack ? 'back' : 'front'} ${isMatched ? 'matched' : ''}`;
 
-const RoundCard = () => {
-    return (
-        <Card>
-            <CardHeader title='라운드 카드 입니다.' />
-            <CardContent>
-                <Typography variant='body2' sx={{ marginBottom: 3.25 }}>
-                    사진을 넣을 예정이고, 카드 자체가 클릭되는 건 지윤님
-                </Typography>
-            </CardContent>
-            <CardActions className='card-action-dense'>
-                <Button>Read More</Button>
-            </CardActions>
-        </Card>
-    )
-}
+  return (
+    <div
+      className={cardClass}
+      onClick={handleClick}
+      data-name={cardName}
+      data-index={index}
+    >
+      <div className="card-content">
+        {isBack ? null : <img src={require(`../../image/RoundCard/${cardName}.png`).default} alt={cardName} />}
+      </div>
+    </div>
+  );
+};
 
-export default RoundCard
+export default RoundCard;

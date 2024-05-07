@@ -13,11 +13,16 @@ import MinorBoard from '../../views/boards/MinorBoard'
 import PlayerBoard from '../../views/boards/PlayerBoard'
 
 const Game = () => {
+  const cardCount = 6;
+  const row = 2;
+
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} md={9}>
-          <ActionBoard/>
+          <div>
+            <ActionBoard cardCount={cardCount} row={row} />
+          </div>
         </Grid>
         <Grid item xs={12} md={3}>
           <MajorBoard />
