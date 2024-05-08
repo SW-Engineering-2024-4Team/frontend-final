@@ -15,7 +15,7 @@
 
 
 .placeholder > .card {
-    background-image: url('../../components/cardbg.jpg');
+    background-image: url('../../image/CardFrame/frame1.png');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
