@@ -1,3 +1,21 @@
+한양대학교 에리카캠퍼스 소프트웨어공학 아그리콜라 보드게임 웹 서비스 프론트엔드 입니다.     
+
+# 1. 게임 화면 디자인 (샘플)
+![Desktop - 1](https://github.com/SW-Engineering-2024-4Team/frontend/assets/86275994/61a9db27-fefa-4c39-b309-98e31baca6e3)
+
+# 2. 프론트엔드 개발자
+
+컴퓨터학부 20학번 강미래     
+컴퓨터학부 20학번 권소연     
+컴퓨터학부 21학번 정지윤     
+
+
+# 3. 구현 상세 설명
+
+
+
+# 4. 프론트엔드 실행 방법
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
