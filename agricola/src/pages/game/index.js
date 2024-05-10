@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid'
 import ApexChartWrapper from '../../styles/libs/react-apexcharts'
 
 // 보드판 불러오기
-import ActionBoard from '../../views/boards/ActionBoard'
+import RoundBoard from '../../views/boards/RoundBoard'
 import MajorBoard from '../../views/boards/MajorBoard'
 import MinorBoard from '../../views/boards/MinorBoard'
 import PlayerBoard from '../../views/boards/PlayerBoard'
@@ -21,7 +21,7 @@ const Game = () => {
       <Grid container spacing={6}>
         <Grid item xs={12} md={9}>
           <div>
-            <ActionBoard cardCount={cardCount} row={row} />
+            <RoundBoard cardCount={cardCount} row={row} />
           </div>
         </Grid>
         <Grid item xs={12} md={3}>

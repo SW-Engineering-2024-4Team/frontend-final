@@ -16,7 +16,9 @@
     "@mui/material-nextjs": "^5.15.11",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "socker.io": "^0.0.0-alpha-beta",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "eslint": "^8",
