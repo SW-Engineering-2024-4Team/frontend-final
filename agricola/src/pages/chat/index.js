@@ -1,29 +1,46 @@
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { useSocket } from "@/components/Provider/SocketProvider";
+import { socket } from "../../socket"; // 이 부분이 올바른 경로인가요?
 
 const ChatPage = () => {
+    const [isConnected, setIsConnected] = useState(false);
+    const [transport, setTransport] = useState("N/A");
     const [messages, setMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
-    const { socket, isConnected } = useSocket();
     const [userId, setUserId] = useState(+new Date());
 
     useEffect(() => {
-        if (!socket) {
-            return;
-        }
+        if (!socket) return; // 소켓이 없으면 리턴
 
-        socket.on('message', (data) => {
+        // 소켓 연결 상태 변화 감지
+        const handleConnect = () => {
+            setIsConnected(true);
+            setTransport(socket.io.engine.transport.name);
+        };
+
+        const handleDisconnect = () => {
+            setIsConnected(false);
+            setTransport("N/A");
+        };
+
+        // 메시지 수신
+        const handleMessage = (data) => {
             setMessages((messages) => [...messages, data]);
-        });
+        };
+
+        socket.on("connect", handleConnect);
+        socket.on("disconnect", handleDisconnect);
+        socket.on("message", handleMessage);
 
         return () => {
-            socket.off('message');
+            // 이펙트 정리
+            socket.off("connect", handleConnect);
+            socket.off("disconnect", handleDisconnect);
+            socket.off("message", handleMessage);
         };
-    }, [socket, messages]);
+    }, [socket]); // 소켓 객체가 바뀔 때만 이펙트 재실행
 
+    // 메시지 전송
     const sendMessage = async (e) => {
         e.preventDefault();
         await axios.post('/api/chat', {

@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
 
-import Image from "next/image";
-
 export default function Home() {
 
   // 소켓 통신 구현
