@@ -9,6 +9,7 @@ import { styled, useTheme } from '@mui/material/styles'
 
 // 보드 컴포넌트 불러오기
 import Board from '../../components/Board' 
+import Box from '@mui/material/Box';
 
 // 라운드 카드 불러오기
 import RoundCard from '../cards/RoundCard'
@@ -19,11 +20,17 @@ const ActionBoard = () => {
    const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
  
   return (
-    <Card sx={{ position: 'relative' }}>
-      <CardContent>
-        <Typography variant='h6'> 보조 설비 / 직업 카드 보드판 입니다.</Typography>
-      </CardContent>
-    </Card>
+    <Box
+      height={400}
+      width={900}
+      my={4}
+      display="flex"
+      alignItems="center"
+      gap={4}
+      p={2}
+      sx={{ border: '2px solid grey' }}
+    >
+    </Box>
   );
 };
 

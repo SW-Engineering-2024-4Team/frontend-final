@@ -9,22 +9,29 @@ import { styled, useTheme } from '@mui/material/styles'
 
 // 보드 컴포넌트 불러오기
 import Board from '../../components/Board' 
+import Box from '@mui/material/Box';
 
 // 라운드 카드 불러오기
 import RoundCard from '../cards/RoundCard'
 
-const ActionBoard = () => {
+const ResourceBoard = () => {
    // 다크모드 세팅하기
    const theme = useTheme()
    const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
  
   return (
-    <Card sx={{ position: 'relative' }}>
-      <CardContent>
-        <Typography variant='h6'>개인 보드판 입니다.</Typography>
-      </CardContent>
-    </Card>
+    <Box
+      height={400}
+      width={420}
+      my={4}
+      display="flex"
+      alignItems="center"
+      gap={4}
+      p={2}
+      sx={{ border: '2px solid grey' }}
+    >
+    </Box>
   );
 };
 
-export default ActionBoard;
+export default ResourceBoard;

@@ -2,23 +2,23 @@ import React from 'react';
 
 // MUI 불러오기
 import { styled, useTheme } from '@mui/material/styles' 
-import Box from '@mui/material/Box';
 
 // 보드 컴포넌트 불러오기
 import Board from '../../components/Board' 
+import Box from '@mui/material/Box';
 
 // 라운드 카드 불러오기
 import RoundCard from '../cards/RoundCard'
 
-const MajorBoard = () => {
+const OwnBoard = () => {
    // 다크모드 세팅하기
    const theme = useTheme()
    const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
  
   return (
     <Box
-      height={420}
-      width={540}
+      height={170}
+      width={420}
       my={4}
       display="flex"
       alignItems="center"
@@ -30,4 +30,4 @@ const MajorBoard = () => {
   );
 };
 
-export default MajorBoard;
+export default OwnBoard;

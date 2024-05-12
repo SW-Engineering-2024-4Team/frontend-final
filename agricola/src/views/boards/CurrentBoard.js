@@ -4,7 +4,7 @@ import RoundCard from '../cards/RoundCard'
 // MUI 불러오기
 import Box from '@mui/material/Box';
 
-const RoundBoard = ({ cardCount, row }) => {
+const CurrentBoard = ({ cardCount, row }) => {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -27,8 +27,8 @@ const RoundBoard = ({ cardCount, row }) => {
 
   return (
     <Box
-      height={590}
-      width={1000}
+      height={100}
+      width={540}
       my={4}
       display="flex"
       alignItems="center"
@@ -36,19 +36,8 @@ const RoundBoard = ({ cardCount, row }) => {
       p={2}
       sx={{ border: '2px solid grey' }}
     >
-      <div className="placeholder" style={{ gridTemplateColumns: `repeat(${row}, 150px)` }}>
-          {cards.map((card, index) => (
-            <RoundCard
-              key={index}
-              number={card.number}
-              index={index}
-              isBack={card.isBack}
-              onClick={handleCardClick}
-            />
-          ))}
-        </div>
     </Box>
   );
 };
 
-export default RoundBoard;
+export default CurrentBoard;
