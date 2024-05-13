@@ -1,19 +1,13 @@
 import React from 'react';
 
 // MUI 불러오기
-import { styled, useTheme } from '@mui/material/styles' 
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
-// 보드 컴포넌트 불러오기
-import Board from '../../components/Board' 
-
-// 라운드 카드 불러오기
-import RoundCard from '../cards/RoundCard'
+// 주요 설비 카드 불러오기
+import MajorCard from '../cards/MajorCard'
 
 const MajorBoard = () => {
-   // 다크모드 세팅하기
-   const theme = useTheme()
-   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
  
   return (
     <Box
@@ -26,6 +20,13 @@ const MajorBoard = () => {
       p={2}
       sx={{ border: '2px solid grey' }}
     >
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        {Array.from(Array(6)).map((_, index) => (
+          <Grid item xs={2} sm={4} md={4} key={index}>
+            <MajorCard  number={index+1} index={index} />
+            </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };
