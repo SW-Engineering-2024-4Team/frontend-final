@@ -3,9 +3,6 @@ import React from 'react';
 // MUI 불러오기
 import Grid from '@mui/material/Grid'
 
-// 스타일 컴포넌트 불러오기
-import ApexChartWrapper from '../../styles/libs/react-apexcharts'
-
 // 보드판 불러오기
 import PlayerBoard from '../../views/boards/ProfileBoard'
 import RoundBoard from '../../views/boards/RoundBoard'
@@ -21,7 +18,7 @@ const Game = () => {
   const row = 3;
 
   return (
-    <ApexChartWrapper>
+    <div>
       <Grid container spacing = {3}>
         <Grid item xs >
           <div>
@@ -57,7 +54,7 @@ const Game = () => {
           <TrigerBoard />
         </Grid>
       </Grid>
-    </ApexChartWrapper>
+    </div>
   );
 };
 
