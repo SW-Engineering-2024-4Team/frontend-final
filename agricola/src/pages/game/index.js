@@ -22,10 +22,10 @@ const Game = () => {
       <Grid container spacing = {3}>
         <Grid item xs >
           <div>
-            <PlayerBoard />
-            <PlayerBoard />
-            <PlayerBoard />
-            <PlayerBoard />
+            <PlayerBoard name={'one'} profileImage={`../image/Profile/profile1.png`} profileNum={'0'} isFirstPlayer={true}/>
+            <PlayerBoard name={'two'} profileImage={`../image/Profile/profile2.png`} profileNum={'1'} isFirstPlayer={false}/>
+            <PlayerBoard name={'three'} profileImage={`../image/Profile/profile3.png`} profileNum={'2'} isFirstPlayer={false}/>
+            <PlayerBoard name={'four'} profileImage={`../image/Profile/profile4.png`} profileNum={'3'} isFirstPlayer={false}/>
           </div>
         </Grid>
         <Grid item xs >
