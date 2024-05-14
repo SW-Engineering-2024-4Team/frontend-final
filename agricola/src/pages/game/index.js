@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid'
 
 // 보드판 불러오기
 import PlayerBoard from '../../views/boards/ProfileBoard'
+import ActionBoard from '../../views/boards/ActionBoard';
 import RoundBoard from '../../views/boards/RoundBoard'
 import CurrentBoard from '../../views/boards/CurrentBoard'
 import MajorBoard from '../../views/boards/MajorBoard'
@@ -12,6 +13,7 @@ import ResourceBoard from '../../views/boards/ResourceBoard'
 import PersonalBoard from '../../views/boards/PersonalBoard';
 import OwnBoard from '../../views/boards/OwnBoard'
 import TrigerBoard from '../../views/boards/TrigerBoard'
+
 
 const Game = () => {
   const cardCount = 6;
@@ -30,7 +32,12 @@ const Game = () => {
         </Grid>
         <Grid item xs >
           <div>
-            <RoundBoard cardCount={cardCount} row={row} />
+            <ActionBoard />
+          </div>
+        </Grid>
+        <Grid item xs >
+          <div>
+            <RoundBoard />
           </div>
         </Grid>
         <Grid item xs >
