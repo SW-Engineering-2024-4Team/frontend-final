@@ -20,7 +20,7 @@ const ActionCard = ({ number, index, isPossible, onClick }) => {
   };
   
   const cardClass = `action ${number} ${isPossible ? 'Y' : 'N'} `
-  const imagePath = `../../image/ActionCard/Clipped_image_20240509_172258 ${number}.png`
+  const imagePath = `../../image/ActionCard/action${number}.png`
 
   return (
     <Card sx={{ maxWidth: 130 }}>
