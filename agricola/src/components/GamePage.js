@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid'
 
 // 보드판 불러오기
 import PlayerBoard from '../views/boards/ProfileBoard'
+import ActionBoard from '../views/boards/ActionBoard';
 import RoundBoard from '../views/boards/RoundBoard'
 import CurrentBoard from '../views/boards/CurrentBoard'
 import MajorBoard from '../views/boards/MajorBoard'
@@ -26,6 +27,11 @@ const Game = () => {
             <PlayerBoard />
             <PlayerBoard />
             <PlayerBoard />
+          </div>
+        </Grid>
+        <Grid item xs >
+          <div>
+            <ActionBoard />
           </div>
         </Grid>
         <Grid item xs >

@@ -28,7 +28,7 @@ const RoundBoard = ({ cardCount, row }) => {
   return (
     <Box
       height={590}
-      width={1000}
+      width={700}
       my={4}
       display="flex"
       alignItems="center"

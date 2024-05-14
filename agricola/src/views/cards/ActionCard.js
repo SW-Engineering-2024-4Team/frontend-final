@@ -27,7 +27,6 @@ const ActionCard = ({ number, index, isPossible, onClick }) => {
         <CardActionArea>
             <CardMedia
             component="img"
-            height="200"
             image={imagePath}
             alt={cardClass}
             onClick={handleClick}
