@@ -27,16 +27,17 @@ const RoundBoard = ({ cardCount, row }) => {
 
   return (
     <Box
-      height={590}
-      width={700}
+      height={420}
+      width={650}
       my={4}
+      mx={-3}
       display="flex"
       alignItems="center"
       gap={4}
       p={2}
       sx={{ border: '2px solid grey' }}
     >
-      <div className="placeholder" style={{ gridTemplateColumns: `repeat(${row}, 150px)` }}>
+      <div className="placeholder" style={{ gridTemplateColumns: `repeat(${row}, 130px)` }}>
           {cards.map((card, index) => (
             <RoundCard
               key={index}

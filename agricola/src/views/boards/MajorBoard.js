@@ -12,7 +12,7 @@ const MajorBoard = () => {
   return (
     <Box
       height={420}
-      width={540}
+      width={480}
       my={4}
       display="flex"
       alignItems="center"
