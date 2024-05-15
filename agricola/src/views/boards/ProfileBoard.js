@@ -54,7 +54,7 @@ const ProfileBoard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
   return (
     // 테두리 박스 설정 
     <Box
-        height={97}
+        height={57}
         width={150}
         my={4}
         display="flex"

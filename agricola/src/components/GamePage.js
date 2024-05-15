@@ -39,14 +39,6 @@ const Game = () => {
             <RoundBoard cardCount={cardCount} row={row} />
           </div>
         </Grid>
-        <Grid item xs >
-          <div>
-            <CurrentBoard />
-          </div>
-          <div> 
-            <MajorBoard />
-          </div>
-        </Grid>
       </Grid>    
       <Grid container spacing = {3}>
         <Grid item xs >
@@ -60,6 +52,8 @@ const Game = () => {
           <TrigerBoard />
         </Grid>
       </Grid>
+        <CurrentBoard />
+        <MajorBoard />
     </div>
   );
 };
