@@ -16,9 +16,10 @@ const RoundBoard = () => {
 
   return (
     <Box
-      height={590}
-      width={320}
+      height={420}
+      width={650}
       my={4}
+      mx={-3}
       display="flex"
       justifyContent="center"
       alignItems="center"
