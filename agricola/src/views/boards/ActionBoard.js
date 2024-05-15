@@ -1,28 +1,17 @@
 import React from 'react';
 
 // MUI 불러오기
-import Card from '@mui/material/Card'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import { styled, useTheme } from '@mui/material/styles' 
-
-// 보드 컴포넌트 불러오기
-import Board from '../../components/Board' 
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
-// 라운드 카드 불러오기
-import RoundCard from '../cards/RoundCard'
+import ActionCard from '../cards/ActionCard';
 
 const ActionBoard = () => {
-   // 다크모드 세팅하기
-   const theme = useTheme()
-   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
  
   return (
     <Box
-      height={400}
-      width={900}
+      height={420}
+      width={700}
       my={4}
       display="flex"
       alignItems="center"
@@ -30,6 +19,13 @@ const ActionBoard = () => {
       p={2}
       sx={{ border: '2px solid grey' }}
     >
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={5}>
+        {Array.from(Array(14)).map((_, index) => (
+          <Grid item xs={3} sm={1} md={1} key={index}>
+            <ActionCard  number={index+1} index={index} />
+            </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };
