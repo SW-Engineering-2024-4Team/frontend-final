@@ -18,8 +18,8 @@ const RoundBoard = () => {
     <Box
       height={420}
       width={650}
-      my={4}
-      mx={-3}
+      mx={2}
+      my={2}
       display="flex"
       justifyContent="center"
       alignItems="center"
