@@ -1,9 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
+
 import CardMedia from '@mui/material/CardMedia'
 import Dialog from '@mui/material/Dialog';
+import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
 import MajorBoard from '@/views/boards/MajorBoard';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
@@ -52,6 +56,7 @@ export default function SimpleDialogDemo() {
             image={imagePath}
             onClick={handleClickOpen}
           />
+
         </CardActionArea>
       </Card>
       <SimpleDialog
