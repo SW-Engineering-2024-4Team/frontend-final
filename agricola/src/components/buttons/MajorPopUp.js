@@ -2,8 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
+import CardMedia from '@mui/material/CardMedia'
 import Dialog from '@mui/material/Dialog';
-import Typography from '@mui/material/Typography';
 import MajorBoard from '@/views/boards/MajorBoard';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
@@ -41,13 +41,17 @@ export default function SimpleDialogDemo() {
     setSelectedValue(value);
   };
 
+  const imagePath = '../../image/CardFrame/frame5.png'
+
   return (
     <div>
-      <Card sx={{ width: 80, height: 80, my:2}} >
+      <Card sx={{ width: 85, height: 85, my:2}} >
         <CardActionArea onClick={handleClickOpen}>
-          <Typography variant="subtitle1" component="div">
-            주요 설비 카드
-          </Typography>
+          <CardMedia
+            component="img"
+            image={imagePath}
+            onClick={handleClickOpen}
+          />
         </CardActionArea>
       </Card>
       <SimpleDialog
