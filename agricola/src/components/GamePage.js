@@ -16,26 +16,28 @@ import TrigerBoard from '../views/boards/TrigerBoard'
 // 팝업 버튼 불러오기
 import MajorPopUp from '../components/buttons/MajorPopUp'
 import SettingPopUp from '../components/buttons/SettingPopUp'
+import ChatPopUp from '../components/buttons/ChatPopUp'
 
 const GamePage = () => {
   const cardCount = 6;
   const row = 3;
 
   return (
-    <div>
-      <Grid container spacing = {3}>
+    <Grid>
+      <Grid container spacing = {1}>
         <CurrentBoard />  
         <MajorPopUp />
         <SettingPopUp />
+        <ChatPopUp />
       </Grid>
 
-      <Grid container spacing = {3}>
+      <Grid container spacing = {1}>
         <ProfileBoard />
         <ActionBoard />
         <RoundBoard cardCount={cardCount} row={row} />
       </Grid>
 
-      <Grid container spacing = {3}>
+      <Grid container spacing = {1}>
         <ResourceBoard />
         <PersonalBoard />
         <Grid item xs >
@@ -43,7 +45,7 @@ const GamePage = () => {
           <TrigerBoard />
         </Grid>
       </Grid>
-    </div>
+    </Grid>
   );
 };
 

@@ -18,7 +18,7 @@ const CurrentBoard = () => {
       p={2}
       sx={{ border: '2px solid grey' }}
     >
-      <h2> 세팅 </h2>
+      <h2> 채팅 </h2>
     </Box>
   );
 };
