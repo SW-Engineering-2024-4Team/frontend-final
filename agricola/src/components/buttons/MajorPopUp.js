@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
+<<<<<<< HEAD
 
 import CardMedia from '@mui/material/CardMedia'
 import Dialog from '@mui/material/Dialog';
+=======
+import CardMedia from '@mui/material/CardMedia'
+>>>>>>> 32414eb ([STYLE]버튼 스타일)
 import Dialog from '@mui/material/Dialog';
-import Typography from '@mui/material/Typography';
 import MajorBoard from '@/views/boards/MajorBoard';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
@@ -56,7 +59,10 @@ export default function SimpleDialogDemo() {
             image={imagePath}
             onClick={handleClickOpen}
           />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 32414eb ([STYLE]버튼 스타일)
         </CardActionArea>
       </Card>
       <SimpleDialog
