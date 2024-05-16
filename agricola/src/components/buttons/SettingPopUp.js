@@ -16,25 +16,9 @@ function SimpleDialog(props) {
   };
 
   return (
-<<<<<<< HEAD
     <Dialog onClose={handleClose} open={open}>
       <MajorBoard />
     </Dialog>
-=======
-    <Box
-      height={50}
-      width={80}
-      mx={1}
-      my={2}
-      display="flex"
-      alignItems="center"
-      gap={4}
-      p={2}
-      sx={{ border: '2px solid grey' }}
-    >
-      <h2> 세팅 </h2>
-    </Box>
->>>>>>> 7c86024 ([FEAT]주요설비카드 팝업)
   );
 }
 
