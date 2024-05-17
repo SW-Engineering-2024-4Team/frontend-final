@@ -62,7 +62,6 @@ const ProfileCard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
         alignItems="center"
         gap={4}
         p={2}
-        sx={{ border: '2px solid grey' }}
       > 
       <Tooltip title={name}> 
         <IconButton onClick={handleOpenUserMenu} sx={{ width: 100, height: 100 }}> 
