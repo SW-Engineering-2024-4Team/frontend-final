@@ -61,8 +61,4 @@ export default function SimpleDialogDemo() {
       />
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 32414eb ([STYLE]버튼 스타일)
