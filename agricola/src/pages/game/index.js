@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 
-// ** MUI Components
+// MUI 불러오기
 import Grid from '@mui/material/Grid'
 
 import LoginPage from "../../components/LoginPage";

@@ -36,13 +36,6 @@ const ProfileCard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
 
   const borderColor = getColor()
 
-<<<<<<< HEAD
-  //  다크모드 세팅하기
-   const theme = useTheme()
-   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
-
-=======
->>>>>>> 67c7f16b659091f4b76c5d7da0d0095156cf78e4
   // 아이콘 선택해서 메뉴창(후에 플레이어보드 팝업 가능한 장소)
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -122,9 +115,4 @@ const ProfileCard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
   );
 }
 
-<<<<<<< HEAD
 export default ProfileCard;
-
-=======
-export default ProfileCard;
->>>>>>> 67c7f16b659091f4b76c5d7da0d0095156cf78e4
