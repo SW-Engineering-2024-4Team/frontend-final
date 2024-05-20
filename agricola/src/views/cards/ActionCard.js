@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
+import Tooltip from '@mui/material/Tooltip';
+
+import { actionCardDetails } from '../../components/details/ActionCardDeatails';
 
 /*
 행동 카드 파라미터
@@ -24,35 +27,57 @@ export default function ActionCard({ cardNumber, playerNumber, onClick }) {
     }
   };
 
+  const handleCardHover = (event) => {
+    const card = event.currentTarget;
+    card.style.transform = 'scale(1.1)';
+    card.style.transition = 'transform 0.1s linear';
+    card.style.boxShadow = '1px 4px 15px -3px rgba(0, 0, 0, 0.5)';
+  };
+
+  const handleCardLeave = (event) => {
+    const card = event.currentTarget;
+    card.style.transform = 'scale(1)';
+    card.style.transition = 'transform 0.1s linear';
+    card.style.boxShadow = 'none';
+  };
+
   const cardClass = `action ${cardNumber} ${isClicked ? 'Y' : 'N'} `;
   const imagePath = `../../image/ActionCard/action${cardNumber}.png`;
   const coverImagePath = playerNumber ? `../../image/ClickedCard/clicked-action${playerNumber}.png` : null;
 
   return (
-    <Card sx={{ maxWidth: 130 }}>
-      <CardActionArea onClick={handleClick}>
-        <div style={{ position: 'relative' }}>
-          <CardMedia
-            component="img"
-            image={imagePath} // 기본 이미지만 표시
-            alt={cardClass}
-          />
-          {isClicked && coverImagePath && (
-            <img
-              src={coverImagePath}
-              alt="coverImage"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
+    <div>
+    <Tooltip title={actionCardDetails[cardNumber-1]}>
+      <Card 
+        sx={{ maxWidth: 130 }} 
+        onMouseEnter={handleCardHover}
+        onMouseLeave={handleCardLeave}
+      >
+        <CardActionArea onClick={handleClick}>
+          <div style={{ position: 'relative' }}>
+            <CardMedia
+              component="img"
+              image={imagePath} // 기본 이미지만 표시
+              alt={cardClass}
             />
-          )}
-        </div>
-      </CardActionArea>
-    </Card>
+            {isClicked && coverImagePath && (
+              <img
+                src={coverImagePath}
+                alt="coverImage"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            )}
+          </div>
+        </CardActionArea>
+      </Card>
+    </Tooltip>
+    </div>
   );
 }
