@@ -10,12 +10,13 @@ import { roundCardDetails } from '../../components/details/RoundCardDeatails';
 
 /*
 라운드 카드 파라미터
+-- index 카드 셔플 순서
 -- cardNumber 카드 고유 번호
 -- playerNumber 클릭한 플레이어 번호
 -- onClick 카드 클릭 여부
 */
 
-export default function RoundCard({ cardNumber, index, playerNumber, isFlipped, onClick }) {
+export default function RoundCard({ index, cardNumber, playerNumber, onClick }) {
 
   // 카드가 뒤집힌 상태
   const [isBack, setIsBack] = useState(false);
@@ -26,7 +27,6 @@ export default function RoundCard({ cardNumber, index, playerNumber, isFlipped, 
   const handleClick = () => {
     if (isBack == false){
       setIsBack(true);
-      isFlipped == true;
       setTimeout(() => {
         if (typeof onClick === 'function') {
           onClick(index, cardNumber);
@@ -71,7 +71,7 @@ export default function RoundCard({ cardNumber, index, playerNumber, isFlipped, 
       <Card 
         sx={{
           maxWidth: 130,
-          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transform: isBack ? 'rotateY(180deg)' : 'rotateY(0deg)',
           transition: 'transform 0.5s',
         }}
         onMouseEnter={handleCardHover}
