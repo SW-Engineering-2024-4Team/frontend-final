@@ -1,13 +1,20 @@
 
 export const roundCardDetails = [
-    `
-    Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
-    Praesent non nunc mollis, fermentum neque at, semper arcu.
-    Nullam eget est sed sem iaculis gravida eget vitae justo.
-    `, 
-    `
-    Bliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
-    Praesent non nunc mollis, fermentum neque at, semper arcu.
-    Nullam eget est sed sem iaculis gravida eget vitae justo.
-    `
-  ];
+  `
+  씨 뿌리기 그리고/또는 빵 굽기
+  `,
+  `
+  울타리 치기
+  `,
+  `
+  `,
+  `
+  주요 설비나 보조 설비 하나
+  `,
+  `
+  집 한 번 고치기 한 후에 울타리 치기
+  `,
+  `
+  빈 방이 있어야만 가족 늘리기 한 후에 보조 설비 하나
+  `
+];
