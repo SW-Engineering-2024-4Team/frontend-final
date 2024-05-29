@@ -2,9 +2,9 @@ import * as React from "react";
 import { useRouter } from "next/router";
 
 // MUI 불러오기
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid';
 
-import LoginPage from "../../components/LoginPage";
+import LoginPage from "../components/LoginPage";
 
 export default function Home(props) {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function Home(props) {
   const handleJoinRoom = (room_, name_, option) => {
     switch (option) {
       case "join":
-        router.push(`game/${room_}?name=${name_}`);
+        router.push(`/${room_}?name=${name_}`);
         break;
       case "tutorial":
         router.push("tutorial");
