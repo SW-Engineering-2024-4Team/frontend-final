@@ -20,12 +20,14 @@ export default function ActionCard({ cardNumber, playerNumber, onClick }) {
   // 카드가 클릭된 상태
   const [isClicked, setIsClicked] = useState(playerNumber !== 0);
 
+
   const handleClick = () => {
     setIsClicked(!isClicked);
     if (typeof onClick === 'function') {
       onClick(cardNumber);
     }
   };
+
 
   const handleCardHover = (event) => {
     const card = event.currentTarget;
@@ -46,6 +48,7 @@ export default function ActionCard({ cardNumber, playerNumber, onClick }) {
   const coverImagePath = playerNumber ? `../../image/ClickedCard/clicked-action${playerNumber}.png` : null;
 
   return (
+
     <div>
     <Tooltip title={actionCardDetails[cardNumber-1]}>
       <Card 

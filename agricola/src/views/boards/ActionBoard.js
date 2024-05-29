@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid'
 import ActionCard from '../cards/ActionCard'
 
 export default function ActionBoard({ currentPlayer }) {
+  
   const initialClickedActionCards = [0, 1, 0, 4, 0, 0, 3, 0, 2, 0, 1, 1, 0, 0];
   const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
 
@@ -19,6 +20,7 @@ export default function ActionBoard({ currentPlayer }) {
       return newClickedActionCards;
     });
   };
+
   return (
     <Box
       height={420}
