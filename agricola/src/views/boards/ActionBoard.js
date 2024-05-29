@@ -19,7 +19,6 @@ export default function ActionBoard({ currentPlayer }) {
       return newClickedActionCards;
     });
   };
-
   return (
     <Box
       height={420}
@@ -33,14 +32,15 @@ export default function ActionBoard({ currentPlayer }) {
       sx={{ border: '2px solid grey' }}
     >
       <Grid container spacing={{ xs: 2, md: 3 }} columns={5}>
-        {clickedActionCards.map((playerNumber, index) => (
-          <Grid item xs={3} sm={1} md={1} key={index}>
-            <ActionCard
-              cardNumber={index + 1}
-              playerNumber={playerNumber}
-              onClick={handleCardClick}
-            />
-          </Grid>
+
+      {clickedActionCards.map((playerNumber, index) => (
+        <Grid item xs={3} sm={1} md={1} key={index}>
+          <ActionCard
+            cardNumber={index + 1}
+            playerNumber={playerNumber}
+            onClick={handleCardClick}
+          />
+        </Grid>
         ))}
       </Grid>
     </Box>
