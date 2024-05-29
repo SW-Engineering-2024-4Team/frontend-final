@@ -11,7 +11,13 @@ const WebSocketPage = () => {
 
   return (
     <div>
-      <WebSocketClient roomId="example-room-id" onMessageReceived={handleOnMessageReceived} /> {/* WebSocketClient 컴포넌트 사용 */}
+      <WebSocketClient 
+        roomId={"1"} 
+        playerId={"아아아가리콜라"}
+        boardId={"히히ㅣ"}
+        cardId={"액션빔"}
+        onMessageReceived={handleOnMessageReceived} 
+      /> {/* WebSocketClient 컴포넌트 사용 */}
       <div>
         <h2>Messages:</h2>
         <ul>
