@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const WebSocketClient = ({ roomId,  playerId, boardId, cardId, onMessageReceived }) => {
+const WebSocketClient = forwardRef(({ roomId, playerId, boardId, onMessageReceived }, ref) => {
   const stompClientRef = useRef(null);
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8090/agricola-service');
+    const socket = new SockJS('http://localhost:8091/agricola-service');
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
@@ -32,22 +32,20 @@ const WebSocketClient = ({ roomId,  playerId, boardId, cardId, onMessageReceived
     };
   }, [roomId, onMessageReceived]);
 
-  const sendMessage = () => {
-    if (stompClientRef.current && stompClientRef.current.connected) {
-      stompClientRef.current.publish({
-        destination: `/app/room/${roomId}/start`,
-        body: JSON.stringify({ "roomId":`${roomId}`, "playerId":`${playerId}`, "boardId":`${boardId}`, "cardId":`${cardId}` }),
-      });
-    } else {
-      console.log('STOMP client is not connected');
+  useImperativeHandle(ref, () => ({
+    sendMessage: (cardNumber) => {
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.publish({
+          destination: `/app/room/${roomId}/start`,
+          body: JSON.stringify({ roomId, playerId, boardId, cardNumber }),
+        });
+      } else {
+        console.log('STOMP client is not connected');
+      }
     }
-  };
+  }));
 
-  return (
-    <div>
-      <button onClick={sendMessage}>Start Game</button>
-    </div>
-  );
-};
+  return null;
+});
 
 export default WebSocketClient;
