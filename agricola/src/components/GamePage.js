@@ -84,7 +84,7 @@ export default function GamePage(props) {
 
       <Grid container spacing = {1}>
         <ProfileBoard />
-        <ActionBoard />
+        <ActionBoard currentPlayer={1} />
         <RoundBoard />
       </Grid>
 

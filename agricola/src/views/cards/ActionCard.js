@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import Tooltip from '@mui/material/Tooltip';
-import { actionCardDetails } from '../../components/details/ActionCardDeatails';
+import { actionCardDetails } from '../../components/details/ActionCardDetails';
 
 export default function ActionCard({ cardNumber, playerNumber, onClick, sendMessage }) {
   const [isClicked, setIsClicked] = useState(playerNumber !== 0);
