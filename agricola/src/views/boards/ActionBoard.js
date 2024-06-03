@@ -5,8 +5,14 @@ import ActionCard from '../cards/ActionCard';
 import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClient 불러오기
 
 export default function ActionBoard({ currentPlayer }) {
+
+  // 0: 사람없음, 1~4: 플레이어 -> 14개 카드
   const initialClickedActionCards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
+  
+  // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
+  const initialResourceActionCards = [,2,1,,1,,1,,,,,1,1,1,,];
+  const [resourceActionCards, setResourceActionCards] = useState(initialResourceActionCards);
 
   const sendMessageRef = useRef(null);
 
@@ -42,7 +48,6 @@ export default function ActionBoard({ currentPlayer }) {
       alignItems="center"
       gap={4}
       p={2}
-      sx={{ border: '2px solid grey' }}
     >
       <WebSocketClient
         roomId="1"
@@ -63,6 +68,7 @@ export default function ActionBoard({ currentPlayer }) {
               playerNumber={playerNumber}
               onClick={() => handleCardClick(index + 1)}
               sendMessage={sendMessageRef.current}
+              resource={resourceActionCards[index+1]}
             />
           </Grid>
         ))}

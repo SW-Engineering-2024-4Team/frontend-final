@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
+import Typography from '@mui/material/Typography'; // Typography import 추가
 import Tooltip from '@mui/material/Tooltip';
 import { actionCardDetails } from '../../components/details/ActionCardDetails';
+import Resource from '../boards/Resource';
 
-export default function ActionCard({ cardNumber, playerNumber, onClick, sendMessage }) {
+export default function ActionCard({ cardNumber, resource, playerNumber, onClick, sendMessage }) {
   const [isClicked, setIsClicked] = useState(playerNumber !== 0);
 
   const handleClick = () => {
@@ -65,6 +67,13 @@ export default function ActionCard({ cardNumber, playerNumber, onClick, sendMess
                   }}
                 />
               )}
+              <Typography 
+                variant="h4" 
+                color="text.primary" 
+                style={{ position: 'absolute', bottom: 18, right: 75, fontWeight: 'bold' }}
+              >
+                {resource}
+              </Typography>
             </div>
           </CardActionArea>
         </Card>
