@@ -16,6 +16,7 @@ export default function ActionBoard({ currentPlayer }) {
 
   const sendMessageRef = useRef(null);
 
+  // 카드 클릭시 백엔드에게 메시지 전송
   const handleCardClick = (cardNumber) => {
     setClickedActionCards((prev) => {
       const newClickedActionCards = [...prev];
@@ -31,10 +32,14 @@ export default function ActionBoard({ currentPlayer }) {
     });
   };
 
+  // 보드 정보 백엔드에게 받아오기
   const handleMessageReceived = (message) => {
     console.log('Message received from server:', message);
     if (message.clickedActionCards) {
       setClickedActionCards(message.clickedActionCards);
+    }
+    if (message.resourceActionCards) {
+      setResourceActionCards(message.resourceActionCards);
     }
   };
 

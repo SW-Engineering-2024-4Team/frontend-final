@@ -2,7 +2,7 @@ import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const WebSocketClient = forwardRef(({ roomId, playerId, boardId, onMessageReceived }, ref) => {
+const WebSocketClient = forwardRef(({ roomId, onMessageReceived }, ref) => {
   const stompClientRef = useRef(null);
 
   useEffect(() => {
@@ -33,11 +33,11 @@ const WebSocketClient = forwardRef(({ roomId, playerId, boardId, onMessageReceiv
   }, [roomId, onMessageReceived]);
 
   useImperativeHandle(ref, () => ({
-    sendMessage: (destination, playerId, cardId) => {
+    sendMessage: (destination, message) => {
       if (stompClientRef.current && stompClientRef.current.connected) {
         stompClientRef.current.publish({
           destination,
-          body: JSON.stringify({ roomId, playerId, cardId }),
+          body: message,
         });
       } else {
         console.log('STOMP client is not connected');
