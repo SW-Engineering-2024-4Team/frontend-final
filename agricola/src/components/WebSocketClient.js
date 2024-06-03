@@ -33,11 +33,11 @@ const WebSocketClient = forwardRef(({ roomId, playerId, boardId, onMessageReceiv
   }, [roomId, onMessageReceived]);
 
   useImperativeHandle(ref, () => ({
-    sendMessage: (cardNumber) => {
+    sendMessage: (destination, playerId, cardId) => {
       if (stompClientRef.current && stompClientRef.current.connected) {
         stompClientRef.current.publish({
-          destination: `/app/room/${roomId}/start`,
-          body: JSON.stringify({ roomId, playerId, boardId, cardNumber }),
+          destination,
+          body: JSON.stringify({ roomId, playerId, cardId }),
         });
       } else {
         console.log('STOMP client is not connected');

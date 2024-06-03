@@ -1,15 +1,11 @@
 import React, { useState, useRef } from 'react';
-
-// MUI 불러오기
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-
-// 행동 카드 불러오기
 import ActionCard from '../cards/ActionCard';
 import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClient 불러오기
 
 export default function ActionBoard({ currentPlayer }) {
-  const initialClickedActionCards = [0, 1, 0, 4, 0, 0, 3, 0, 2, 0, 1, 1, 0, 0];
+  const initialClickedActionCards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
 
   const sendMessageRef = useRef(null);
@@ -22,7 +18,7 @@ export default function ActionBoard({ currentPlayer }) {
       
       // 소켓 메시지 전송
       if (sendMessageRef.current) {
-        sendMessageRef.current(cardNumber);
+        sendMessageRef.current(`/app/room/1/actionCardClick`, currentPlayer, cardNumber );
       }
 
       return newClickedActionCards;
@@ -31,6 +27,9 @@ export default function ActionBoard({ currentPlayer }) {
 
   const handleMessageReceived = (message) => {
     console.log('Message received from server:', message);
+    if (message.clickedActionCards) {
+      setClickedActionCards(message.clickedActionCards);
+    }
   };
 
   return (
@@ -48,7 +47,6 @@ export default function ActionBoard({ currentPlayer }) {
       <WebSocketClient
         roomId="1"
         playerId={currentPlayer}
-        boardId="board1"
         onMessageReceived={handleMessageReceived}
         ref={(client) => {
           if (client) {
@@ -56,14 +54,15 @@ export default function ActionBoard({ currentPlayer }) {
           }
         }}
       />
+      
       <Grid container spacing={{ xs: 2, md: 3 }} columns={5}>
         {clickedActionCards.map((playerNumber, index) => (
           <Grid item xs={3} sm={1} md={1} key={index}>
             <ActionCard
               cardNumber={index + 1}
               playerNumber={playerNumber}
-              onClick={handleCardClick}
-              sendMessage={sendMessageRef.current} // sendMessage 전달
+              onClick={() => handleCardClick(index + 1)}
+              sendMessage={sendMessageRef.current}
             />
           </Grid>
         ))}
