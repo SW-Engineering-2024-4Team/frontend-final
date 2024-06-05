@@ -28,6 +28,7 @@ const RoundBoard = () => {
       justifyContent="center"
       gap={4}
       p={2}
+      sx={{ border: "2px solid grey", m: 0 }}
     >
       <Grid container direction="column" justifyContent="center" alignItems="flex-start" spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 8, md: 8 }}>
         {Array.from(Array(4)).map((_, index) => (

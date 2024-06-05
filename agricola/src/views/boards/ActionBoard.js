@@ -49,12 +49,11 @@ export default function ActionBoard({ currentPlayer }) {
     <Box
       height={420}
       width={700}
-      mx={2}
-      my={2}
       display="flex"
       alignItems="center"
       gap={4}
       p={2}
+      sx={{ border: "2px solid grey", m: 0 }}
     >
       <WebSocketClient
         roomId="1"

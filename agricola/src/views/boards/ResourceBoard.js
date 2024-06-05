@@ -57,7 +57,7 @@ const ResourceBoard = () => {
       alignItems="center"
       justifyContent="center"
       p={2}
-      sx={{ border: "2px solid grey" }}
+      sx={{ border: "2px solid grey", m: 0 }}
     >
       <WebSocketClient
         roomId="1"
