@@ -4,8 +4,8 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography'; // Typography import 추가
 import Tooltip from '@mui/material/Tooltip';
+
 import { actionCardDetails } from '../../components/details/ActionCardDetails';
-import Resource from '../boards/Resource';
 
 export default function ActionCard({ cardNumber, resource, playerNumber, onClick, sendMessage }) {
   const [isClicked, setIsClicked] = useState(playerNumber !== 0);
