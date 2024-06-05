@@ -16,6 +16,7 @@ import CardDeckBoard from '../views/boards/CardDeckBoard'
 import MajorPopUp from '../components/buttons/MajorPopUp'
 import SettingPopUp from '../components/buttons/SettingPopUp'
 import ChatPopUp from '../components/buttons/ChatPopUp'
+import UseCardPopUp from './buttons/UseCardPopUp'
 
 export default function GamePage(props) {
   const [msg, setMsg] = React.useState(""); // 메시지 입력 상태 관리
@@ -73,27 +74,40 @@ export default function GamePage(props) {
   }, [props.content, oldChat]);
 
   return (
-    <Grid>
-      <Grid container spacing = {1}>
-        <CurrentBoard />  
-        <MajorPopUp />
-        <SettingPopUp />
-        <ChatPopUp />
-      </Grid>
+    <div style={{
+      position: 'absolute',
+      backgroundImage: 'url("../image/background.png")', // 배경 이미지 경로에 따라 수정
+      backgroundSize: '2000px', // 배경 이미지 크기 조절
+      backgroundRepeat: 'repeat', // 배경 이미지 반복 설정
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      minHeight: '1500px', // 최소 높이 설정
+    }}>
+      <Grid >
+        <Grid container spacing = {1}>
+          <CurrentBoard />  
+          <MajorPopUp />
+          <SettingPopUp />
+          <ChatPopUp />
+          <UseCardPopUp />
+        </Grid>
 
-      <Grid container spacing = {1}>
-        <ProfileBoard />
-        <ActionBoard />
-        <RoundBoard />
-      </Grid>
+        <Grid container spacing = {1}>
+          <ProfileBoard />
+          <ActionBoard />
+          <RoundBoard />
+        </Grid>
 
-      <Grid container spacing = {1}>
-        <ResourceBoard />
-        <PersonalBoard />
-        <Grid item xs >
-          <CardDeckBoard />
+        <Grid container spacing = {1}>
+          <ResourceBoard />
+          <PersonalBoard />
+          <Grid item xs >
+            <CardDeckBoard />
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 
@@ -17,18 +16,18 @@ const TriggerBoard = ({ triggerList, ownList, handleClick }) => {
       sx={{
         border: '2px solid grey',
         overflowX: 'auto',
-        overflowY: 'visible',
+        overflowY: 'hidden',
         '&::-webkit-scrollbar': { display: 'none' },
         '-ms-overflow-style': 'none',
         scrollbarWidth: 'none',
       }}
-      height={170}
+      height={190}
       width={420}
     >
       {triggerList.map((card) => {
         const CardComponent = card.type === 'minor' ? MinorCard : card.type === 'work' ? WorkCard : MajorCard;
         return (
-          <Box key={card.id} sx={{ flex: '0 0 auto', mr: '-30px' }}>
+          <Box key={card.id} sx={{ flex: '0 0 auto', mr: '-30px', my: '-20px' }}>
             <CardComponent
               cardNumber={card.id}
               playerNumber={card.playerNumber}
@@ -43,3 +42,4 @@ const TriggerBoard = ({ triggerList, ownList, handleClick }) => {
 };
 
 export default TriggerBoard;
+

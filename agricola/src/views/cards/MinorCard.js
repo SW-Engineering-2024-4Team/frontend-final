@@ -12,17 +12,24 @@ const MinorCard = ({ index, cardNumber, isTrigger, onClick }) => {
   
   const [isClicked, setIsClicked] = useState(false);
 
+  // 카드 클릭 시 호출되는 핸들러 함수 
   const handleClick = () => {
-    setIsClicked(!isClicked);
+    if (!isClicked){
+      setIsClicked(true);
+      setTimeout(() => {
+        if (typeof onClick === 'function') {
+          onClick(index, cardNumber);
+        }
+      }, 500); // 0.5초 후에 onClick 실행
+    }
   };
 
   const handleCardHover = (event) => {
     const card = event.target.closest('.minor-card');
-    card.style.transform = 'translateY(-10%) scale(1.1)';
+    card.style.transform = 'scale(1.1) translateY(-45%)';
     card.style.transition = 'transform 0.1s linear';
     card.style.boxShadow = '1px 4px 15px -3px rgba(0, 0, 0, 0.5)';
     card.style.zIndex = '1';
-    
   };
 
   const handleCardLeave = (event) => {
@@ -37,19 +44,20 @@ const MinorCard = ({ index, cardNumber, isTrigger, onClick }) => {
   const imagePath = isClicked ? null : `../image/MinorCard/minor${cardNumber}.png`;
 
   return (
+    <div>
     <Tooltip title={minorCardDetails[cardNumber-1]}>
       <Card
         className="minor-card"
         sx={{
-          maxWidth: 130,
+          maxWidth: 150,
         }}
-        onMouseEnter={handleCardHover}
+        onClick={handleClick}
+        onMouseEnter={(e) => handleCardHover(e, isClicked)}
         onMouseLeave={handleCardLeave}
       >
         <CardActionArea>
           <CardMedia
             component="img"
-            height="200"
             image={imagePath}
             alt={cardClass}
           />
@@ -66,6 +74,7 @@ const MinorCard = ({ index, cardNumber, isTrigger, onClick }) => {
         </CardActionArea>
       </Card>
     </Tooltip>
+    </div>
   );
 };
 

@@ -15,12 +15,12 @@ const OwnBoard = ({ ownList, handleClick }) => {
         sx={{
           border: '2px solid grey',
           overflowX: 'auto',
-          overflowY: 'visible',
+          overflowY: 'hidden',
           '&::-webkit-scrollbar': { display: 'none' },
           '-ms-overflow-style': 'none',
           scrollbarWidth: 'none',
         }}
-        height={170}
+        height={160}
         width={420}
       >
         {ownList.map((card) => {
@@ -28,7 +28,7 @@ const OwnBoard = ({ ownList, handleClick }) => {
         return (
           <Box 
             key={card.id} 
-            sx={{ flex: '0 0 auto', mr: '-30px' }}
+            sx={{ flex: '0 0 auto', mr: '-30px', my: '90px'}}
             onClick={() => handleClick(card.id)}
             style={{ cursor: 'pointer' }}
           >

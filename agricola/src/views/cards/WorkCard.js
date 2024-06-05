@@ -35,11 +35,10 @@ const WorkCard = ({ index, cardNumber, isTriger, onClick }) => {
 
   const handleCardHover = (event) => {
     const card = event.target.closest('.work-card');
-    card.style.transform = 'translateY(-10%) scale(1.1)';
+    card.style.transform = 'scale(1.1) translateY(-45%)';
     card.style.transition = 'transform 0.1s linear';
     card.style.boxShadow = '1px 4px 15px -3px rgba(0, 0, 0, 0.5)';
     card.style.zIndex = '1';
-    
   };
 
   const handleCardLeave = (event) => {
@@ -58,20 +57,29 @@ const WorkCard = ({ index, cardNumber, isTriger, onClick }) => {
     <Tooltip title={workCardDetails[cardNumber-1]}>
       <Card className="work-card" 
         sx={{
-          maxWidth: 130,
+          maxWidth: 150,
           // position: 'relative',
         }}
+        onClick={handleClick}
         onMouseEnter={handleCardHover}
         onMouseLeave={handleCardLeave}
-        >
-        <CardActionArea onClick={handleClick}>
+      >
+        <CardActionArea>
           <CardMedia
-              component="img"
-              height="200"
-              image={imagePath}
-              alt={cardClass}
-              onClick={handleClick} // 카드 클릭 이벤트에 handleClick 함수 할당
-            />
+            component="img"
+            image={imagePath}
+            alt={cardClass}
+          />
+          <img
+            src={imagePath}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+            }}
+          />
         </CardActionArea>
       </Card>
     </Tooltip>
