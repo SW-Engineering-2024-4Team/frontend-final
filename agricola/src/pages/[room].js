@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from "next/router";
 import io from "socket.io-client";
 
 // 페이지 불러오기
 import GamePage from "../components/GamePage";
 import LoginPage from "../components/LoginPage";
+import WebSocketClient from "../components/WebSocketClient";
 
 let socket;
 
@@ -18,6 +19,9 @@ export default function Room() {
   const [messages, setMessages] = useState([]); // 채팅 메시지 목록 상태
   const [playerId, setPlayerId] = useState(null); // 플레이어 ID 상태
   const [isGameStarted, setIsGameStarted] = useState(false); // 게임 시작 상태
+  const [players, setPlayers] = useState([]); // 플레이어 목록 상태
+
+  const webSocketClientRef = useRef(null); // 웹소켓 클라이언트 레퍼런스
 
   useEffect(() => {
     if (!socket && name && room) {
@@ -44,9 +48,15 @@ export default function Room() {
         setPlayerId(id);
       });
 
-      socket.on('startGame', () => {
+      socket.on('startGame', (playerList) => {
         console.log('게임 시작됨');
         setIsGameStarted(true);
+        setPlayers(playerList);
+
+        // 게임이 시작하면 백엔드에 메시지 보내기
+        if (webSocketClientRef.current) {
+          webSocketClientRef.current.sendMessage(`/app//room/1/start`, JSON.stringify(playerList));
+        }
       });
 
       socket.on('receiveMessage', (msg) => {
@@ -60,9 +70,9 @@ export default function Room() {
   };
 
   // 메시지 전송 함수
-  const sendMessage = () => {
-    if (message.trim()) {
-      const msg = { playerId, text: message };
+  const sendMessage = (text) => {
+    if (text.trim()) {
+      const msg = { playerId, text };
       socket.emit('sendMessage', msg);
       setMessage('');
     }
@@ -70,7 +80,7 @@ export default function Room() {
 
   // 방에 참여하는 함수
   const joinRoom = (room_, name_) => {
-    socket.emit("join-room", room_);
+    socket.emit("join-room", room_, name_);
     setName2(name_);
     setPath("game");
   };
@@ -79,8 +89,11 @@ export default function Room() {
   const displayGame = () => {
     return (
       <GamePage 
-        currentPlayerName={name}
         currentPlayer={playerId}
+        sendMessage={sendMessage}
+        messages={messages}
+        message={message}
+        setMessage={setMessage}
       />
     );
   };
@@ -105,6 +118,9 @@ export default function Room() {
           {name == undefined && (
             <LoginPage type="room" btnFunction={joinRoom} room={room} />
           )}
+          <WebSocketClient ref={webSocketClientRef} roomId={room} onMessageReceived={(msg) => {
+            console.log('STOMP 메시지 수신됨:', msg);
+          }} />
         </>
       );
   }

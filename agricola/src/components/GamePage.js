@@ -21,29 +21,31 @@ import ChatPopUp from '../components/buttons/ChatPopUp';
 // 컨텍스트 관련 불러오기
 import { PlayerProvider, usePlayer } from './PlayerContext';
 
-function GamePage({currentPlayerName, currentPlayer}) {
+function GamePage({currentPlayer}) {
+
+  const clickedPlayer = useState('');
 
   return (
     <Grid>
       <Grid container spacing={1}>
         <CurrentBoard />  
-        <MajorPopUp />
+        <MajorPopUp currentPlayer={currentPlayer} />
         <SettingPopUp />
-        <ChatPopUp />
+        <ChatPopUp currentPlayer={currentPlayer} />
       </Grid>
 
       <Grid container spacing={1}>
-        <ProfileBoard />
+        <ProfileBoard clickedPlayer={clickedPlayer} />
         <ActionBoard currentPlayer={currentPlayer} />
         <RoundBoard currentPlayer={currentPlayer} />
       </Grid>
 
       <Grid container spacing={1}>
-        <ResourceBoard />
-        <PersonalBoard currentPlayer={currentPlayer} />
+        <ResourceBoard clickedPlayer={clickedPlayer} />
+        <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
         <Grid item xs>
-          <OwnBoard />
-          <TrigerBoard />
+          <OwnBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+          <TrigerBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
         </Grid>
       </Grid>
     </Grid>
