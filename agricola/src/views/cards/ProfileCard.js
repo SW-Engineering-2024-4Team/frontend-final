@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 
 // MUI 불러오기
 import Box from '@mui/material/Box';
@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { styled, useTheme } from '@mui/material/styles' 
+import { styled } from '@mui/material/styles';
 import { blue, green, red, yellow } from '@mui/material/colors';
 import Badge from '@mui/material/Badge';
 
@@ -19,29 +19,42 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     backgroundImage: `url("../../image/Profile/playerFirst.png")`, // 뱃지 이미지 경로 설정
     backgroundSize: 'cover',
-    width: '35px', // 뱃지 이미지의 가로 크기에 맞게 조정
-    height: '35px', // 뱃지 이미지의 세로 크기에 맞게 조정
+    width: '30px', // 뱃지 이미지의 가로 크기에 맞게 조정
+    height: '30px', // 뱃지 이미지의 세로 크기에 맞게 조정
     '&::after': {
       display: 'none', // 이미지에서 사용하지 않는 요소 숨기기
     },
   },
 }));
 
-const ProfileCard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
+let clickedPlayer = ''; // 클릭된 플레이어를 저장할 변수
+
+export const setClickedPlayer = (player) => {
+  clickedPlayer = player;
+};
+
+export const getClickedPlayer = () => {
+  return clickedPlayer;
+};
+
+const ProfileCard = ({ currentPlayer, name, profileImage, profileNum, isFirstPlayer }) => {
   // 테두리 색 정하기
   const getColor = () => {
     const colors = [blue[500], green[500], red[500], yellow[500]];
     return colors[profileNum];
   };
 
-  const borderColor = getColor()
+  const borderColor = getColor();
 
   // 아이콘 선택해서 메뉴창(후에 플레이어보드 팝업 가능한 장소)
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget)
+    setAnchorElUser(event.currentTarget);
+    setClickedPlayer(currentPlayer);
+    console.log(getClickedPlayer());
   };
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -49,15 +62,15 @@ const ProfileCard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
   return (
     // 테두리 박스 설정 
     <Box
-        height={57}
-        width={120}
-        my={3}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        gap={4}
-        p={2}
-      > 
+      height={57}
+      width={120}
+      my={3}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      gap={4}
+      p={2}
+    > 
       <Tooltip title={name}> 
         <IconButton onClick={handleOpenUserMenu} sx={{ width: 100, height: 100 }}> 
           {isFirstPlayer ? (
@@ -113,6 +126,6 @@ const ProfileCard = ({ name, profileImage, profileNum , isFirstPlayer }) => {
       </Menu>
     </Box>
   );
-}
+};
 
 export default ProfileCard;

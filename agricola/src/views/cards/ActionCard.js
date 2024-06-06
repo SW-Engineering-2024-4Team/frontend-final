@@ -7,14 +7,9 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { actionCardDetails } from '../../components/details/ActionCardDetails';
 
-export default function ActionCard({ cardNumber, resource, playerNumber, onClick, sendMessage }) {
-  const [isClicked, setIsClicked] = useState(playerNumber !== 0);
+export default function ActionCard({ cardNumber, resource, playerNumber, sendMessage, isClicked }) {
 
   const handleClick = () => {
-    setIsClicked(!isClicked);
-    if (typeof onClick === 'function') {
-      onClick(cardNumber);
-    }
     if (typeof sendMessage === 'function') {
       sendMessage(cardNumber);
     }
@@ -42,7 +37,7 @@ export default function ActionCard({ cardNumber, resource, playerNumber, onClick
     <div>
       <Tooltip title={actionCardDetails[cardNumber - 1]}>
         <Card 
-          sx={{ maxWidth: 130 }} 
+          sx={{ maxWidth: 130, borderRadius: '8px' }} // border radius 설정
           onMouseEnter={handleCardHover}
           onMouseLeave={handleCardLeave}
         >

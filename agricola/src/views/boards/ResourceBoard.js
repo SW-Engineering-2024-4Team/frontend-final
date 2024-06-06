@@ -51,13 +51,11 @@ const ResourceBoard = () => {
     <Box
       height={400}
       width={150}
-      mx={2}
-      my={2}
       display="flex"
       alignItems="center"
       justifyContent="center"
       p={2}
-      sx={{ border: "2px solid grey", m: 0 }}
+      sx={{ border: "2px solid grey", m: 1 }}
     >
       <WebSocketClient
         roomId="1"

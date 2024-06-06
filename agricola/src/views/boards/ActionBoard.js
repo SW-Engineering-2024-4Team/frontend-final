@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ActionCard from '../cards/ActionCard';
@@ -7,7 +8,7 @@ import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClie
 export default function ActionBoard({ currentPlayer }) {
 
   // 0: 사람없음, 1~4: 플레이어 -> 14개 카드
-  const initialClickedActionCards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const initialClickedActionCards = [0, 0, 0, 0, 0, 2, 1, 3, 4, 0, 0, 0, 0, 0];
   const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
   
   // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
@@ -26,7 +27,7 @@ export default function ActionBoard({ currentPlayer }) {
       // 소켓 메시지 전송
       if (sendMessageRef.current) {
         const messageJSON = JSON.stringify({ currentPlayer, cardNumber });
-        sendMessageRef.current(`/app/room/1/actionCardClick`, messageJSON );
+        sendMessageRef.current(`/app/room/1/playerChoice`, messageJSON );
         console.log('SEND ACTION CARD')
       }
 
@@ -53,7 +54,7 @@ export default function ActionBoard({ currentPlayer }) {
       alignItems="center"
       gap={4}
       p={2}
-      sx={{ border: "2px solid grey", m: 0 }}
+      sx={{ m: 0 }}
     >
       <WebSocketClient
         roomId="1"
@@ -72,6 +73,7 @@ export default function ActionBoard({ currentPlayer }) {
             <ActionCard
               cardNumber={index + 1}
               playerNumber={playerNumber}
+              isClicked={() => handleCardClick(index + 1)}
               onClick={() => handleCardClick(index + 1)}
               sendMessage={sendMessageRef.current}
               resource={resourceActionCards[index+1]}
