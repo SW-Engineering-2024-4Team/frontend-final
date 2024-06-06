@@ -13,7 +13,7 @@ import { actionCardDetails } from '../../components/details/ActionCardDetails';
 import ActionCard2 from './ActionCard2';
 
 function Dialog7Expand(props) {
-  const { onClose, open7 } = props;
+  const { onClose, open7, sendMessage } = props;
 
   const handleClose = () => {
     onClose();
@@ -32,7 +32,7 @@ function Dialog7Expand(props) {
         sx={{ border: '2px solid grey' }}
       >
         {[1, 2, 3, 4].map(index => (
-          <ActionCard2 key={index} cardNumber={7} index={index} />
+          <ActionCard2 key={index} cardNumber={7} index={index} sendMessage={sendMessage} />
         ))}
       </Box>
     </Dialog>
@@ -42,10 +42,11 @@ function Dialog7Expand(props) {
 Dialog7Expand.propTypes = {
   onClose: PropTypes.func.isRequired,
   open7: PropTypes.bool.isRequired,
+  sendMessage: PropTypes.func.isRequired,
 };
 
 function Dialog8First(props) {
-  const { onClose, open8 } = props;
+  const { onClose, open8, sendMessage } = props;
 
   const handleClose = () => {
     onClose();
@@ -53,7 +54,7 @@ function Dialog8First(props) {
 
   return (
     <Dialog onClose={handleClose} open={open8}>
-      <DialogTitle>회홥 장소</DialogTitle>
+      <DialogTitle>농장 확장</DialogTitle>
       <Box
         mx={2}
         my={2}
@@ -64,7 +65,7 @@ function Dialog8First(props) {
         sx={{ border: '2px solid grey' }}
       >
         {[1, 2].map(index => (
-          <ActionCard2 key={index} cardNumber={8} index={index} />
+          <ActionCard2 key={index} cardNumber={8} index={index} sendMessage={sendMessage} />
         ))}
       </Box>
     </Dialog>
@@ -74,6 +75,7 @@ function Dialog8First(props) {
 Dialog8First.propTypes = {
   onClose: PropTypes.func.isRequired,
   open8: PropTypes.bool.isRequired,
+  sendMessage: PropTypes.func.isRequired,
 };
 
 export default function ActionCard({ cardNumber, resource, playerNumber, sendMessage, isClicked }) {
@@ -83,6 +85,7 @@ export default function ActionCard({ cardNumber, resource, playerNumber, sendMes
   const handleClick = () => {
     if (typeof sendMessage === 'function') {
       sendMessage(cardNumber);
+      console.log(cardNumber);
     }
     if (cardNumber === 7) {
       setOpen7(true);
@@ -159,10 +162,12 @@ export default function ActionCard({ cardNumber, resource, playerNumber, sendMes
           <Dialog7Expand
             open7={open7}
             onClose={handleClose7}
+            sendMessage={sendMessage}
           />
           <Dialog8First
             open8={open8}
             onClose={handleClose8}
+            sendMessage={sendMessage}
           />
         </Card>
       </Tooltip>
@@ -174,6 +179,6 @@ ActionCard.propTypes = {
   cardNumber: PropTypes.number.isRequired,
   resource: PropTypes.string,
   playerNumber: PropTypes.number,
-  sendMessage: PropTypes.func,
+  sendMessage: PropTypes.func.isRequired,
   isClicked: PropTypes.bool.isRequired,
 };
