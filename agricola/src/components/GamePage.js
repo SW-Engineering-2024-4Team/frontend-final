@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from 'react';
 
 // MUI 불러오기
 import Grid from '@mui/material/Grid';
@@ -21,63 +21,7 @@ import ChatPopUp from '../components/buttons/ChatPopUp';
 // 컨텍스트 관련 불러오기
 import { PlayerProvider, usePlayer } from './PlayerContext';
 
-function GamePage(props) {
-  const [msg, setMsg] = React.useState(""); // 메시지 입력 상태 관리
-  const [oldChat, setOldChat] = React.useState(props.content.length); 
-  const exibLastChat = React.useRef(null);
-
-  // PlayerContext 사용
-  const { currentPlayer } = usePlayer();
-
-  const handleEnter = (e) => { // 클릭 이벤트 발생시
-    sendMsg();
-  };
-
-  const sendMsg = () => { 
-    if (msg !== "") {
-      props.btnFunction(props.name, msg);
-      setMsg("");
-    }
-  };
-
-  const displayMsg = (e_, idx_) => {
-    switch (e_.name) {
-      case "newPlayer":
-        return (
-          <ReceivedMessage key={idx_}>
-            <Typography>{e_.msg}</Typography>
-          </ReceivedMessage>
-        );
-      case "cartela":
-        return (
-          <ReceivedMessage key={idx_}>
-            <Typography>seus numeros são:</Typography>
-            <Typography>{e_.msg.toString()}</Typography>
-            <Typography>boa sorte!</Typography>
-          </ReceivedMessage>
-        );
-      case "sent-200":
-        return (
-          <SentMessage key={idx_}>
-            <Typography>{e_.msg}</Typography>
-          </SentMessage>
-        );
-      default:
-        return (
-          <ReceivedMessage key={idx_}>
-            <Typography variant="subtitle2">{e_.name}</Typography>
-            <Typography>{e_.msg}</Typography>
-          </ReceivedMessage>
-        );
-    }
-  };
-
-  React.useEffect(() => {
-    if (props.content.length !== oldChat) {
-      setOldChat(props.content.length);
-      exibLastChat.current.scrollTop = exibLastChat.current.scrollHeight;
-    }
-  }, [props.content, oldChat]);
+function GamePage({currentPlayerName, currentPlayer}) {
 
   return (
     <Grid>
@@ -90,8 +34,8 @@ function GamePage(props) {
 
       <Grid container spacing={1}>
         <ProfileBoard />
-        <ActionBoard currentPlayer={1} />
-        <RoundBoard />
+        <ActionBoard currentPlayer={currentPlayer} />
+        <RoundBoard currentPlayer={currentPlayer} />
       </Grid>
 
       <Grid container spacing={1}>

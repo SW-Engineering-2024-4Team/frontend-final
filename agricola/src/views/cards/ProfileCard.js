@@ -40,7 +40,7 @@ export const getClickedPlayer = () => {
 const ProfileCard = ({ currentPlayer, name, profileImage, profileNum, isFirstPlayer }) => {
   // 테두리 색 정하기
   const getColor = () => {
-    const colors = [blue[500], green[500], red[500], yellow[500]];
+    const colors = [green[500], red[500], blue[500], yellow[500]];
     return colors[profileNum];
   };
 
