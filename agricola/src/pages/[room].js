@@ -55,7 +55,7 @@ export default function Room() {
 
         // 게임이 시작하면 백엔드에 메시지 보내기
         if (webSocketClientRef.current) {
-          webSocketClientRef.current.sendMessage(`/app//room/1/start`, JSON.stringify(playerList));
+          webSocketClientRef.current.sendMessage(`/app/room/1/start`, JSON.stringify(playerList));
         }
       });
 
