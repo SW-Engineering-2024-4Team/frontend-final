@@ -18,6 +18,7 @@ import ChatPopUp from '../components/buttons/ChatPopUp';
 
 // 팝업 다이어로그 불러오기
 import DialogChoiceCard from './buttons/DialogChoiceCard';
+import WebSocketPage from './WebSocketPage';
 
 // 컨텍스트 관련 불러오기
 import { usePlayer } from './PlayerContext';
@@ -70,6 +71,10 @@ function GamePage({ currentPlayer }) {
         onClose={handleClose}
       />
       </button>
+      <WebSocketPage 
+        roomId="1" 
+        message="아 진짜 아그리콜라 귀낯ㅎ"
+      />
     </Grid>
   );
 }

@@ -21,7 +21,7 @@ export default function ActionBoard({ currentPlayer }) {
   const handleCardClick = (cardNumber) => {
     setClickedActionCards((prev) => {
       const newClickedActionCards = [...prev];
-      newClickedActionCards[cardNumber - 1] = currentPlayer;
+      // newClickedActionCards[cardNumber - 1] = currentPlayer;
       console.log(`${currentPlayer}번 플레이어가 행동카드 ${cardNumber}번을 클릭했습니다.`);
       
       // 소켓 메시지 전송
