@@ -79,21 +79,11 @@ export default function Room() {
     }
   };
 
-  // 플레이어 정보를 백엔드로 전송하는 함수
-  const sendPlayerInfoToBackend = (playerList) => {
-    console.log('4명의 플레이어가 모두 입장했습니다. 플레이어 정보를 백엔드로 전송합니다:', playerList);
-    socket.emit('playerInfo', playerList);
-  };
-
   // 메시지 전송 함수
-  const sendMessage = (text) => {
-    if (text.trim()) {
-      const msg = { playerId, text };
-      if (sendMessageRef.current) {
-        sendMessageRef.current(msg); // WebSocketClient를 통한 메시지 전송
-      } else {
-        socket.emit('sendMessage', msg); // 소켓을 통한 메시지 전송
-      }
+  const sendMessage = () => {
+    if (message.trim()) {
+      const msg = { playerId, text: message };
+      socket.emit('sendMessage', msg);
       setMessage('');
     }
   };
