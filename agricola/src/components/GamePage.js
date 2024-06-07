@@ -64,49 +64,61 @@ function GamePage({ currentPlayer }) {
   };
 
   return (
-    <Grid>
-      <Grid container spacing={1}>
-        <CurrentBoard />
-        <MajorPopUp currentPlayer={currentPlayer} />
-        <SettingPopUp />
-        <ChatPopUp currentPlayer={currentPlayer} />
-      </Grid>
-
-      <Grid container spacing={1}>
-        <ProfileBoard clickedPlayer={clickedPlayer} />
-        <ActionBoard currentPlayer={currentPlayer} />
-        <RoundBoard currentPlayer={currentPlayer} />
-      </Grid>
-
-      <Grid container spacing={1}>
-        <ResourceBoard clickedPlayer={clickedPlayer} />
-        <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
-        <Grid item xs>
-          <CardDeckBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+    <div style={{
+      position: 'absolute',
+      backgroundImage: 'url("../image/background.png")', // 배경 이미지 경로에 따라 수정
+      backgroundSize: '2000px', // 배경 이미지 크기 조절
+      backgroundRepeat: 'repeat', // 배경 이미지 반복 설정
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      minHeight: '1500px', // 최소 높이 설정
+    }}>
+      <Grid>
+        <Grid container spacing={1}>
+          <CurrentBoard />
+          <MajorPopUp currentPlayer={currentPlayer} />
+          <SettingPopUp />
+          <ChatPopUp currentPlayer={currentPlayer} />
         </Grid>
+
+        <Grid container spacing={1}>
+          <ProfileBoard clickedPlayer={clickedPlayer} />
+          <ActionBoard currentPlayer={currentPlayer} />
+          <RoundBoard currentPlayer={currentPlayer} />
+        </Grid>
+
+        <Grid container spacing={1}>
+          <ResourceBoard clickedPlayer={clickedPlayer} />
+          <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+          <Grid item xs>
+            <CardDeckBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+          </Grid>
+        </Grid>
+        <WebSocketClient
+          roomId="1"
+          playerId={currentPlayer}
+          onMessageReceived={handleMessageReceived}
+        />
+        {playerId === currentPlayer ? handleClick() : null}
+        <button onClick={handleClick} >
+        ChoiceCard TEST
+        <DialogChoiceCard
+            cardNumber={7}
+            choiceType={"AndOr"}
+            options={options}
+            open={open}
+            onClose={handleClose}
+            currentPlayer={currentPlayer}
+        />
+        </button>
+        <WebSocketPage 
+          roomId="1" 
+          message="아 진짜 아그리콜라 귀낯ㅎ"
+        />
       </Grid>
-      <WebSocketClient
-        roomId="1"
-        playerId={currentPlayer}
-        onMessageReceived={handleMessageReceived}
-      />
-      {playerId === currentPlayer ? handleClick() : null}
-      <button onClick={handleClick} >
-      ChoiceCard TEST
-      <DialogChoiceCard
-          cardNumber={7}
-          choiceType={"AndOr"}
-          options={options}
-          open={open}
-          onClose={handleClose}
-          currentPlayer={currentPlayer}
-      />
-      </button>
-      <WebSocketPage 
-        roomId="1" 
-        message="아 진짜 아그리콜라 귀낯ㅎ"
-      />
-    </Grid>
+    </div>
   );
 }
 
