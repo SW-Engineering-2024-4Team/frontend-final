@@ -31,3 +31,15 @@ export default function Home(props) {
     </Grid>
   );
 }
+// pages/index.js
+// import BoardGame from '../components/BoardGame';
+
+// const Home = () => {
+//   return (
+//     <div>
+//       <BoardGame />
+//     </div>
+//   );
+// };
+
+// export default Home;

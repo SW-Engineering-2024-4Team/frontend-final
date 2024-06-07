@@ -6,5 +6,6 @@ module.exports = {
     moduleFileExtensions: ['js', 'jsx'],
     transformIgnorePatterns: ['<rootDir>/node_modules/'],
     setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+    reactStrictMode: true,
   };
   

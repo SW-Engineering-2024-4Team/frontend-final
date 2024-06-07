@@ -1,18 +1,14 @@
-import React from "react";
+import React, { useState, useRef } from 'react';
 
 // MUI 불러오기
-import Card from "@mui/material/Card";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import CardContent from "@mui/material/CardContent";
 import { styled, useTheme } from "@mui/material/styles";
 
 // 보드 컴포넌트 불러오기
 import Box from "@mui/material/Box";
 
 import Resource from "./Resource";
+import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClient 불러오기
 
-import { useState } from "react";
 const ResourceBoard = () => {
   const theme = useTheme();
   const imageSrc =
@@ -41,25 +37,39 @@ const ResourceBoard = () => {
     setResources(updatedResources);
   };
 
+  const sendMessageRef = useRef(null);
+
+  // 보드 정보 백엔드에게 받아오기
+  const handleMessageReceived = (message) => {
+    console.log('Message received from server:', message);
+    if (Array.isArray(message.resources)) {
+      setResources(message.resources);
+    } else {
+      console.error('Invalid resources format received from server');
+    }
+  };
+
   return (
     <Box
       height={400}
       width={150}
-      mx={2}
-      my={2}
       display="flex"
       alignItems="center"
       justifyContent="center"
       p={2}
-      sx={{ border: "2px solid grey" }}
+      sx={{ border: "2px solid grey", m: 1 }}
     >
+      <WebSocketClient
+        roomId="1"
+        onMessageReceived={handleMessageReceived}
+      />
       <div className="resource-board">
         {[...Array(5)].map((_, index) => (
           <div
             key={index}
             style={{ display: "flex", justifyContent: "space-around" }}
           >
-            {resources.slice(index * 2, (index + 1) * 2).map((resource) => (
+            {(Array.isArray(resources) ? resources : []).slice(index * 2, (index + 1) * 2).map((resource) => (
               <Resource
                 key={resource.name}
                 name={resource.name}
