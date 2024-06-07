@@ -27,7 +27,7 @@ export default function ActionBoard({ currentPlayer }) {
       // 소켓 메시지 전송
       if (sendMessageRef.current) {
         const messageJSON = JSON.stringify({ currentPlayer, cardNumber });
-        sendMessageRef.current(`/app/room/1/playerChoice`, messageJSON );
+        sendMessageRef.current(`/app/room/1/actionCardClick`, messageJSON );
         console.log('SEND ACTION CARD')
       }
 
