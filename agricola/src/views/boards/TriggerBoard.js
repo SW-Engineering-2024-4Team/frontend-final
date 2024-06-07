@@ -1,30 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-
 import TriggerCard from '../cards/TriggerCard';
+import WebSocketClient from '../../components/WebSocketClient';
 import { useDeckCard1, useDeckCard2, useDeckCard3, useDeckCard4 } from '@/components/CardContext';
 
+const TriggerBoard = ({ currentPlayer, clickedPlayer }) => {
+  const { deckCard1 } = useDeckCard1();
+  const { deckCard2 } = useDeckCard2();
+  const { deckCard3 } = useDeckCard3();
+  const { deckCard4 } = useDeckCard4();
 
-const TriggerBoard = ({ currentPlayer, clickedPlayer, handleClick }) => {
-  const { deckCard1, setDeckCard1 } = useDeckCard1();
-  const { deckCard2, setDeckCard2 } = useDeckCard2();
-  const { deckCard3, setDeckCard3 } = useDeckCard3();
-  const { deckCard4, setDeckCard4 } = useDeckCard4();
-
+  const [deckCard, setDeckCard] = useState([]);
   const [color, setColor] = useState('');
 
-  // useEffect 훅을 사용하여 clickedPlayer 값이 변경될 때만 색상을 업데이트
   useEffect(() => {
     if (clickedPlayer === 1) {
       setColor('rgba(0, 255, 0, 0.3)');
+      setDeckCard(deckCard1);
     } else if (clickedPlayer === 2) {
       setColor('rgba(255, 0, 0, 0.3)');
+      setDeckCard(deckCard2);
     } else if (clickedPlayer === 3) {
       setColor('rgba(0, 0, 255, 0.3)');
+      setDeckCard(deckCard3);
     } else {
       setColor('rgba(255, 255, 0, 0.3)');
+      setDeckCard(deckCard4);
     }
-  }, [clickedPlayer]);
+  }, [clickedPlayer, deckCard1, deckCard2, deckCard3, deckCard4]);
+
+  const sendMessageRef = useRef(null);
+
+  const handleCardClick = ({ cardType, cardNumber }) => {
+    console.log(`${currentPlayer}번 플레이어가 ${cardType}카드 ${cardNumber}번을 클릭했습니다.`);
+
+    if (sendMessageRef.current) {
+      const messageJSON = JSON.stringify({ currentPlayer, cardType, cardNumber });
+      sendMessageRef.current(`/app/room/1/triggerCardClick`, messageJSON);
+      console.log('SEND TRIGGER CARD');
+    }
+  };
 
   return (
     <Box
@@ -38,28 +53,36 @@ const TriggerBoard = ({ currentPlayer, clickedPlayer, handleClick }) => {
       p={2}
       sx={{
         m: 0,
-        borderRadius: 2, 
+        borderRadius: 2,
         overflowX: 'auto',
         overflowY: 'hidden',
       }}
     >
-      {deckCard1.map((item) => {
-        return (
-          <Box key={item.cardNumber} 
-            sx={{ flex: '0 0 auto', my: '90px'}}
-            // onClick={() => handleClick(item.cardNumber)}
-            style={{ cursor: 'pointer' }}
-          >
-            <TriggerCard
-              cardType={item.cardType}
-              cardNumber={item.cardNumber}
-            />
-          </Box>
-        );
-      })}
+      <WebSocketClient
+        roomId="1"
+        playerId={currentPlayer}
+        ref={(client) => {
+          if (client) {
+            sendMessageRef.current = client.sendMessage;
+          }
+        }}
+      />
+
+      {deckCard.map((item) => (
+        <Box
+          key={item.cardNumber}
+          sx={{ flex: '0 0 auto', my: '90px' }}
+          style={{ cursor: 'pointer' }}
+        >
+          <TriggerCard
+            cardType={item.cardType}
+            cardNumber={item.cardNumber}
+            onClick={() => handleCardClick(item)}
+          />
+        </Box>
+      ))}
     </Box>
   );
 };
 
 export default TriggerBoard;
-

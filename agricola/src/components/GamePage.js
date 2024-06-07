@@ -26,6 +26,7 @@ import { usePlayer } from './PlayerContext';
 
 function GamePage({ currentPlayer }) {
   const { clickedPlayer } = usePlayer();
+  
 
   useEffect(() => {
     console.log('Clicked player:', clickedPlayer);
@@ -95,7 +96,7 @@ function GamePage({ currentPlayer }) {
           <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
           <Grid> 
             <TriggerBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
-            <OwnBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+            <OwnBoard currentPlayer={currentPlayer} />
           </Grid>
         </Grid>
         <WebSocketClient
