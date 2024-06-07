@@ -8,32 +8,13 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
 import { actionCardDetails } from '../../components/details/ActionCardDetails';
-import Dialog7Expand from '../../components/buttons/Dialog7Expand';
-import Dialog8First from '../../components/buttons/Dialog8First';
 
 export default function ActionCard({ cardNumber, resource, playerNumber, sendMessage, isClicked }) {
-  const [open7, setOpen7] = useState(false);
-  const [open8, setOpen8] = useState(false);
-
   const handleClick = () => {
     if (typeof sendMessage === 'function') {
       sendMessage(cardNumber);
       console.log(cardNumber);
     }
-    if (cardNumber === 7) {
-      setOpen7(true);
-    }
-    if (cardNumber === 8) {
-      setOpen8(true);
-    }
-  };
-
-  const handleClose7 = () => {
-    setOpen7(false);
-  };
-
-  const handleClose8 = () => {
-    setOpen8(false);
   };
 
   const handleCardHover = (event) => {
@@ -92,16 +73,6 @@ export default function ActionCard({ cardNumber, resource, playerNumber, sendMes
               </Typography>
             </div>
           </CardActionArea>
-          <Dialog7Expand
-            open7={open7}
-            onClose={handleClose7}
-            sendMessage={sendMessage}
-          />
-          <Dialog8First
-            open8={open8}
-            onClose={handleClose8}
-            sendMessage={sendMessage}
-          />
         </Card>
       </Tooltip>
     </div>

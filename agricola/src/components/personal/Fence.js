@@ -8,18 +8,18 @@ export default function Fence({ ratio, currentPlayer, isVertical, isActive, pid,
 
   const [color, setColor] = useState('');
 
-  // useEffect 훅을 사용하여 currentPlayer 값이 변경될 때만 색상을 업데이트
+  // useEffect 훅을 사용하여 clickedPlayer 값이 변경될 때만 색상을 업데이트
   useEffect(() => {
-    if (currentPlayer === 1) {
+    if (clickedPlayer === 1) {
       setColor('green');
-    } else if (currentPlayer === 2) {
+    } else if (clickedPlayer === 2) {
       setColor('red');
-    } else if (currentPlayer === 3) {
+    } else if (clickedPlayer === 3) {
       setColor('blue');
     } else {
       setColor('yellow');
     }
-  }, [currentPlayer]);
+  }, [clickedPlayer]);
 
   const handleClick = () => {
     console.log(ratio);

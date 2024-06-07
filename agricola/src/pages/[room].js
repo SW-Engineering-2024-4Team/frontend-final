@@ -56,6 +56,7 @@ export default function Room() {
       // 게임 시작 이벤트 수신
       socket.on('startGame', (playerList) => {
         console.log('게임 시작됨');
+        setPlayers(playerList);
         setIsGameStarted(true);
       });
 
@@ -65,9 +66,23 @@ export default function Room() {
         setMessages((prevMessages) => [...prevMessages, msg]);
       });
 
+      // 플레이어 목록 업데이트 이벤트
+      socket.on('updatePlayers', (playerList) => {
+        setPlayers(playerList);
+        if (playerList.length === 4) {
+          sendPlayerInfoToBackend(playerList);
+        }
+      });
+
     } catch (e) {
       console.log("에러 발생: ", e);
     }
+  };
+
+  // 플레이어 정보를 백엔드로 전송하는 함수
+  const sendPlayerInfoToBackend = (playerList) => {
+    console.log('4명의 플레이어가 모두 입장했습니다. 플레이어 정보를 백엔드로 전송합니다:', playerList);
+    socket.emit('playerInfo', playerList);
   };
 
   // 메시지 전송 함수
@@ -117,14 +132,14 @@ export default function Room() {
   };
 
   // 게임이 시작되지 않았을 때 대기 화면
-  if (!isGameStarted) {
-    return (
-      <div>
-        <h1>플레이어 대기 중...</h1>
-        <p>4명의 플레이어가 게임에 참가할 때까지 기다리고 있습니다.</p>
-      </div>
-    );
-  }
+  // if (!isGameStarted) {
+  //   return (
+  //     <div>
+  //       <h1>플레이어 대기 중...</h1>
+  //       <p>4명의 플레이어가 게임에 참가할 때까지 기다리고 있습니다.</p>
+  //     </div>
+  //   );
+  // }
 
   // 경로에 따라 다른 화면을 렌더링
   switch (path) {
