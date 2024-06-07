@@ -43,7 +43,7 @@ function GamePage({ currentPlayer }) {
 
   // playerChoice 관련해서 백엔드에게 받는 내용
   const [choiceType, setChoiceType] = useState('');
-  const [cardNumber, setCardNumber] = useState(0); // 눌렀던 카드 번호
+  const [cardNumber, setCardNumber] = useState(8); // 눌렀던 카드 번호
   const [options, setOptions] = useState([]); // "options":["option1":"방 만들기 및 외양간 짓기","option2":"방 만들기만","option3":"외양간 짓기만"]
   const [playerId, setPlayerId] = useState(0); // 팝업을 띄어주는 플레이어 "playerId":"3"
 
@@ -60,7 +60,7 @@ function GamePage({ currentPlayer }) {
       setOptions(message.options);
     }
     if (message.playerId) {
-      setPlayerId(message.playerId);
+      setPlayerId(parseInt(message.playerId, 10));
     }
   };
 
@@ -93,14 +93,17 @@ function GamePage({ currentPlayer }) {
         onMessageReceived={handleMessageReceived}
       />
       {playerId === currentPlayer ? handleClick() : null}
+      <button onClick={handleClick} >
+      ChoiceCard TEST
       <DialogChoiceCard
-          cardNumber={cardNumber}
-          choiceType={choiceType}
+          cardNumber={7}
+          choiceType={"AndOr"}
           options={options}
           open={open}
           onClose={handleClose}
           currentPlayer={currentPlayer}
       />
+      </button>
       <WebSocketPage 
         roomId="1" 
         message="아 진짜 아그리콜라 귀낯ㅎ"

@@ -11,6 +11,7 @@ import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClie
 function DialogChoiceCard(props) {
   const { cardNumber, choiceType, options, open, onClose, currentPlayer } = props;
 
+  const choice = true;
   const [cardName, setCardName] = useState('');
   const [count, setCount] = useState([]);
 
@@ -22,10 +23,11 @@ function DialogChoiceCard(props) {
       // const newClickedChoiceCards = [...prev];
       // newClickedChoiceCards[cardNumber - 1] = currentPlayer;
       console.log(`${currentPlayer}번 플레이어가 추가선택카드 ${cardNumber}-${index}번을 클릭했습니다.`);
-      
+      const player = currentPlayer;
+
       // 소켓 메시지 전송
       if (sendMessageRef.current) {
-        const messageJSON = JSON.stringify({ currentPlayer, choiceType, index });
+        const messageJSON = JSON.stringify({ player, choiceType, choice });
         sendMessageRef.current(`/app/room/1/playerChoice`, messageJSON );
         console.log('SEND CHOICE CARD')
       }

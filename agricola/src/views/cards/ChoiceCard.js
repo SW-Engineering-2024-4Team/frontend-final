@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
 
-function ChoiceCard({ cardNumber, onClick, sendMessage }) {
+function ChoiceCard({ cardNumber, index, onClick, sendMessage }) {
 
   const handleClick = () => {
     if (typeof onClick === 'function') {
