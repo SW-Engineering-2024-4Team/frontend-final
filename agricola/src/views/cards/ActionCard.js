@@ -4,12 +4,16 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography'; // Typography import 추가
 import Tooltip from '@mui/material/Tooltip';
-
 import { actionCardDetails } from '../../components/details/ActionCardDetails';
 
-export default function ActionCard({ cardNumber, resource, playerNumber, sendMessage, isClicked }) {
+export default function ActionCard({ cardNumber, resource, playerNumber, onClick, sendMessage }) {
+  const [isClicked, setIsClicked] = useState(playerNumber !== 0);
 
   const handleClick = () => {
+    setIsClicked(!isClicked);
+    if (typeof onClick === 'function') {
+      onClick(cardNumber);
+    }
     if (typeof sendMessage === 'function') {
       sendMessage(cardNumber);
     }
@@ -37,7 +41,7 @@ export default function ActionCard({ cardNumber, resource, playerNumber, sendMes
     <div>
       <Tooltip title={actionCardDetails[cardNumber - 1]}>
         <Card 
-          sx={{ maxWidth: 130, borderRadius: '8px' }} // border radius 설정
+          sx={{ maxWidth: 130, borderRadius: 2}} 
           onMouseEnter={handleCardHover}
           onMouseLeave={handleCardLeave}
         >

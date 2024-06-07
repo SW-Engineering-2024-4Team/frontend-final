@@ -1,10 +1,13 @@
-import { useRouter } from "next/router"
-import * as React from "react"
-import io from "socket.io-client"
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from "next/router";
+import io from "socket.io-client";
 
 // 페이지 불러오기
-import GamePage from "../components/GamePage"
-import LoginPage from "../components/LoginPage"
+import GamePage from "../components/GamePage";
+import LoginPage from "../components/LoginPage";
+import WebSocketClient from "../components/WebSocketClient";
+import { PlayerProvider } from '../components/PlayerContext';
+import { CardProvider } from '../components/CardContext';
 
 let socket;
 
@@ -12,106 +15,139 @@ export default function Room() {
   const router = useRouter();
   const { room, name } = router.query; // URL 쿼리에서 room과 name 가져오기
 
-  // 메시지 헤드
-  const [name2, setName2] = React.useState(name); // 이름: 플레이어 이름
-  const [path, setPath] = React.useState(" "); // 현재 경로 (방 이름, 플레이어 이름 포함)
+  const [name2, setName2] = useState(name); // 플레이어 이름 상태
+  const [path, setPath] = useState(''); // 현재 경로 상태 (방 이름, 플레이어 이름 포함)
+  const [message, setMessage] = useState(''); // 채팅 메시지 상태
+  const [messages, setMessages] = useState([]); // 채팅 메시지 목록 상태
+  const [playerId, setPlayerId] = useState(null); // 플레이어 ID 상태
+  const [isGameStarted, setIsGameStarted] = useState(false); // 게임 시작 상태
+  const [players, setPlayers] = useState([]); // 플레이어 목록 상태
 
-  // 메시지 바디
-  const [board, setBoard] = React.useState(" "); // 보드: 클릭한 보드가 어떤 보드인지
-  const [card, setCard] = React.useState(" "); // 카드: 클릭한 카드가 어떤 카드인지
-  const [content, setContent] = React.useState([]); // 콘텐츠: 추가적인 내용 (플래그)
+  const webSocketClientRef = useRef(null); // 웹소켓 클라이언트 레퍼런스
+  const sendMessageRef = useRef(null); // 메시지 전송 함수 레퍼런스
 
-  React.useEffect(() => {
-    socketInitializer(name);
-  }, [name]);
+  // 컴포넌트가 마운트될 때 및 name과 room 변경될 때 실행
+  useEffect(() => {
+    if (!socket && name && room) {
+      socketInitializer(name, room);
+    }
+  }, [name, room]);
 
-  //set event listeners
-  const socketInitializer = async (name_) => {
+  // 소켓 초기화 함수
+  const socketInitializer = async (name_, room_) => {
     try {
-      console.log("here 1");
-      await fetch("/api/socket?option=connection");
-      socket = io();
+      console.log("소켓 초기화 중");
+      await fetch("/api/socket"); // 서버에서 소켓 초기화
+      socket = io({
+        path: '/api/socket',
+      });
+
+      // 소켓 연결 시 실행
       socket.on("connect", () => {
-        if (name_ != undefined) joinRoom(room, name);
+        console.log('서버에 연결됨');
+        if (name_ && room_) joinRoom(room_, name_);
       });
 
-      // 보드 정보를 받아 옵니다.
-      socket.on("get-board", (msg) => {
-        setBoard((prev) => [...prev, msg]);
+      // 서버로부터 플레이어 ID 할당 받음
+      socket.on('assignId', (id) => {
+        console.log('플레이어 ID 할당됨:', id); // 디버깅을 위한 로그
+        setPlayerId(id);
       });
 
-      // 카드 정보를 받아옵니다.
-      socket.on("get-card", (msg) => {
-        setCard((prev) => [...prev, msg]); 
+      // 게임 시작 이벤트 수신
+      socket.on('startGame', (playerList) => {
+        console.log('게임 시작됨');
+        setPlayers(playerList);
+        setIsGameStarted(true);
       });
 
-      // 콘텐츠 정보를 받아옵니다.
-      socket.on("get-content", (msg) => {
-        setContent((prev) => [...prev, msg]); 
+      // 메시지 수신 이벤트
+      socket.on('receiveMessage', (msg) => {
+        console.log('메시지 수신됨:', msg); // 디버깅을 위한 로그
+        setMessages((prevMessages) => [...prevMessages, msg]);
+      });
+
+      // 플레이어 목록 업데이트 이벤트
+      socket.on('updatePlayers', (playerList) => {
+        setPlayers(playerList);
+        if (playerList.length === 4) {
+          sendPlayerInfoToBackend(playerList);
+        }
       });
 
     } catch (e) {
-      console.log("error: ", e);
+      console.log("에러 발생: ", e);
     }
   };
-  
+
+  // 메시지 전송 함수
+  const sendMessage = () => {
+    if (message.trim()) {
+      const msg = { playerId, text: message };
+      socket.emit('sendMessage', msg);
+      setMessage('');
+    }
+  };
+
   // 방에 참여하는 함수
   const joinRoom = (room_, name_) => {
-    socket.emit("join-room", room_);
+    socket.emit("join-room", room_, name_);
     setName2(name_);
-    setPath("wait");
-  };
-
-  const handleBoard = (name_, msg_) => {
-    socket.emit("send-board", { room: room, name: name_, msg: msg_ });
-    setBoard((prev) => [...prev, { name: "sent-200", msg: msg_ }]);
-  };
-  
-  const handleCard = (name_, msg_) => {
-    socket.emit("send-card", { room: room, name: name_, msg: msg_ });
-    setCard((prev) => [...prev, { name: "sent-200", msg: msg_ }]);
-  };
-
-  const handleContent = (name_, msg_) => {
-    socket.emit("send-content", { room: room, name: name_, msg: msg_ });
-    setContent((prev) => [...prev, { name: "sent-200", msg: msg_ }]);
+    setPath("game");
   };
 
   // 게임 화면을 렌더링하는 함수
-  const displayGame = (option) => {
-    console.log(option);
+  const displayGame = () => {
     return (
-      <GamePage 
-        name={name2}
-        board={board}
-        card={card}
-        content={content}
-        btnBoardFunction={handleBoard}
-        btnCardFunction={handleCard}
-        btnContentFunction={handleContent}
-        onGame={option == "on-game" ? true : false}
-      />
+      <div>
+        <PlayerProvider>
+          <CardProvider>
+            <WebSocketClient
+              roomId="1"
+              onMessageReceived={(message) => console.log('Received message:', message)}
+              ref={(client) => {
+                if (client) {
+                  sendMessageRef.current = client.sendMessage;
+                }
+              }}
+            />
+            <GamePage
+              currentPlayer={playerId}
+              sendMessage={sendMessage}
+              messages={messages}
+              message={message}
+              setMessage={setMessage}
+            />
+          </CardProvider>
+        </PlayerProvider>
+      </div>
     );
   };
 
+  // 게임이 시작되지 않았을 때 대기 화면
+  // if (!isGameStarted) {
+  //   return (
+  //     <div>
+  //       <h1>플레이어 대기 중...</h1>
+  //       <p>4명의 플레이어가 게임에 참가할 때까지 기다리고 있습니다.</p>
+  //     </div>
+  //   );
+  // }
+
+  // 경로에 따라 다른 화면을 렌더링
   switch (path) {
-    case "wait":
+    case "game":
       return displayGame();
-    case "bingo":
-      return (
-        <>
-          {displayChat("on-game")}
-        </>
-      );
     default:
       return (
         <>
-            <p>
-              내 이름: {name} 방 이름: {room}
-            </p>
-            {name == undefined && (
-              <LoginPage type="room" btnFunction={joinRoom} room={room} />
-            )}
+          <p>내 이름: {name} 방 이름: {room}</p>
+          {name == undefined && (
+            <LoginPage type="room" btnFunction={joinRoom} room={room} />
+          )}
+          <WebSocketClient ref={webSocketClientRef} roomId={room} onMessageReceived={(msg) => {
+            console.log('STOMP 메시지 수신됨:', msg);
+          }} />
         </>
       );
   }

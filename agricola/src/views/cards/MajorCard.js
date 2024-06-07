@@ -1,65 +1,92 @@
-import React from 'react';
 
-// MUI 컴포넌트
+// const MajorCard = ({ index, cardNumber, isTriger, onClick, isGrayscale }) => {
+//   const [isClicked, setIsClicked] = useState(false);
+
+//   const handleClick = () => {
+//     setIsClicked(!isClicked);
+//     if (!isGrayscale) {
+//       onClick(index, cardNumber);
+//     }
+//   };
+
+//   const cardClass = `major ${cardNumber} ${isTriger ? 'Y' : 'N'}`;
+//   const imagePath = `../../image/MajorCard/major${cardNumber}.png`;
+
+//   return (
+//     <Tooltip title={majorCardDetails[cardNumber - 1]}>
+//       <Card sx={{ maxWidth: 130 }}>
+//         <CardActionArea>
+//           <CardMedia
+//             component="img"
+//             height="200"
+//             image={imagePath}
+//             alt={cardClass}
+//             onClick={handleClick}
+//             style={{
+//               filter: isGrayscale ? 'grayscale(100%)' : 'none'
+//             }}
+//           />
+//         </CardActionArea>
+//       </Card>
+//     </Tooltip>
+//   );
+// };
+
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-
-const HtmlTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} followCursor />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: '#f5f5f9',
-      color: 'rgba(0, 0, 0, 0.87)',
-      maxWidth: 150,
-      fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
-    },
-  }));
-
+import Tooltip from '@mui/material/Tooltip';
+import { majorCardDetails } from '../../components/details/MajorCardDeatails';
 
 /*
 주요 설비 카드 파라미터
--- number 카드 고유 번호
 -- index 카드 순서
--- isTriger 카드 발동 여부
--- onClick 카드 클릭 여부
+-- cardNumber 카드 고유 번호
+-- isGrayscale 흑백 여부
+-- onClick 카드 클릭 이벤트
 */
 
-const MajorCard = ({ number, index, isTriger, onClick }) => {
+const MajorCard = ({ index, cardNumber, isGrayscale, onClick }) => {
+  // const [isGrayscale, setIsGrayscale] = useState(false);
+
+  // const [isClicked, setIsClicked] = useState(false);
+
+  // const handleClick = () => {
+  //   setIsClicked(!isClicked);
+  //   if (!isGrayscale) {
+  //     onClick(index, cardNumber);
+  //   }
+  // };
 
   const handleClick = () => {
-    onClick(index, number);
+    if (typeof onClick === 'function') {
+      onClick(index, cardNumber);
+      // isGrayscale = true;
+    } else {
+      console.error('onClick is not a function');
+    }
   };
   
-  const cardClass = `major ${number} ${isTriger ? 'Y' : 'N'} `
-  const imagePath = `../../image/MajorCard/major${number}.png`
+  const cardClass = `major ${cardNumber} ${isGrayscale ? 'Y' : 'N'} `;
+  const imagePath = `../../image/MajorCard/major${cardNumber}.png`;
 
   return (
-    <HtmlTooltip
-        title={
-          <React.Fragment>
-            <Typography color="inherit">그릇 제작소</Typography>
-            <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
-            {"It's very engaging. Right?"}
-          </React.Fragment>
-        }
-      >
-        <Card sx={{ maxWidth: 130 }}>
-            <CardActionArea>
-                <CardMedia
-                component="img"
-                height="200"
-                image={imagePath}
-                alt={cardClass}
-                onClick={handleClick}
-                />
-            </CardActionArea>
-        </Card>
-    </HtmlTooltip>
+    <Tooltip title={majorCardDetails[cardNumber - 1]}>
+      <Card sx={{ maxWidth: 130, filter: isGrayscale ? 'grayscale(100%)' : 'none' }}>
+        <CardActionArea onClick={handleClick}>
+          <CardMedia
+            component="img"
+            height="200"
+            image={imagePath}
+            alt={cardClass}
+            // style={{
+            //   filter: isGrayscale ? 'grayscale(100%)' : 'none'
+            // }}
+          />
+        </CardActionArea>
+      </Card>
+    </Tooltip>
   );
 };
 

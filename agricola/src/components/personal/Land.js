@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import { CardMedia } from '@mui/material';
 
-export default function Fence({ landNumber, state, pid, onClick, isActive, data }) {
-  // 세로일 때는 width와 height를 바꿔줌
+export default function Land({ currentPlayer, clickedPlayer, landNumber, state, pid, onClick, isActive, data }) {
+  
+  const [color, setColor] = useState('');
+
+  // useEffect 훅을 사용하여 clickedPlayer 값이 변경될 때만 색상을 업데이트
+  useEffect(() => {
+    if (clickedPlayer === 1) {
+      setColor('green');
+    } else if (clickedPlayer === 2) {
+      setColor('red');
+    } else if (clickedPlayer === 3) {
+      setColor('blue');
+    } else {
+      setColor('yellow');
+    }
+  }, [clickedPlayer]);
 
   const handleClick = () => {
     console.log(landNumber);
@@ -18,9 +32,9 @@ export default function Fence({ landNumber, state, pid, onClick, isActive, data 
   return (
     <Card>
     <CardActionArea sx={{
-        width: '100px', // ratio를 width로 설정
-        height: '100px', // ratio를 height로 설정
-        backgroundColor: pid % 2 ? 'red' : 'blue', // pid에 따라 배경색 변경
+        width: '100px',
+        height: '100px',
+        backgroundColor: color, 
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover', 

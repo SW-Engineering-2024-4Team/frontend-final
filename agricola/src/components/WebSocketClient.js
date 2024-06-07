@@ -45,7 +45,7 @@ const WebSocketClient = forwardRef(({ roomId, onMessageReceived }, ref) => {
 
   useImperativeHandle(ref, () => ({
     sendMessage: (destination, message) => {
-      if (connected && stompClientRef.current) {
+      if (connected && stompClientRef.current && stompClientRef.current.connected) {
         stompClientRef.current.publish({
           destination,
           body: message,

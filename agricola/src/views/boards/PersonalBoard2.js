@@ -5,7 +5,7 @@ import Land from '../../components/personal/Land';
 import Empty from '../../components/personal/Empty';
 import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClient 불러오기
 
-export default function PersonalBoard2({ pid, currentPlayer }) {
+export default function PersonalBoard2({ pid, currentPlayer, clickedPlayer }) {
   const [fencePosition, setFencePosition] = useState(Array(39).fill(false));
   const sendMessageRef = useRef(null);
 
@@ -31,12 +31,23 @@ export default function PersonalBoard2({ pid, currentPlayer }) {
 
   const renderFence = (ratio, isVertical, index) => (
     <Fence
-      currentPlayer={3}
+      currentPlayer={currentPlayer}
+      clickedPlayer={clickedPlayer}
       ratio={ratio}
       isVertical={isVertical}
       isActive={isFenceActive(index)}
       pid={pid}
       onClick={() => handleCardClick(index)}
+    />
+  );
+
+  const renderLand = (index, state = "") => (
+    <Land
+      pid={pid}
+      state={state}
+      isActive={true}
+      currentPlayer={currentPlayer}
+      clickedPlayer={clickedPlayer}
     />
   );
 
@@ -80,15 +91,15 @@ export default function PersonalBoard2({ pid, currentPlayer }) {
 
       <Empty />
       {renderFence(6, true, 6)}
-      <Land pid={pid} state={"wood_room"} isActive={true}/>
+      {renderLand(1, "wood_room")}
       {renderFence(7, true, 7)}
-      <Land pid={pid} state={"soil_room"} isActive={true}/>
+      {renderLand(2, "soil_room")}
       {renderFence(8, true, 8)}
-      <Land pid={pid} state={"rock_room"} isActive={true}/>
+      {renderLand(3, "rock_room")}
       {renderFence(9, true, 9)}
-      <Land pid={pid} state={"plow"} isActive={true}/>
+      {renderLand(4, "plow")}
       {renderFence(10, true, 10)}
-      <Land pid={pid} state={"plow_grain1"} isActive={true}/>
+      {renderLand(5, "plow_grain1")}
       {renderFence(11, true, 11)}
       <Empty />
 
@@ -106,15 +117,15 @@ export default function PersonalBoard2({ pid, currentPlayer }) {
       
       <Empty />
       {renderFence(17, true, 17)}
-      <Land pid={pid} />
+      {renderLand(6)}
       {renderFence(18, true, 18)}
-      <Land pid={pid} />
+      {renderLand(7)}
       {renderFence(19, true, 19)}
-      <Land pid={pid} />
+      {renderLand(8)}
       {renderFence(20, true, 20)}
-      <Land pid={pid} />
+      {renderLand(9)}
       {renderFence(21, true, 21)}
-      <Land pid={pid} />
+      {renderLand(10)}
       {renderFence(22, true, 22)}
       <Empty />
 
@@ -132,15 +143,15 @@ export default function PersonalBoard2({ pid, currentPlayer }) {
 
       <Empty />
       {renderFence(28, true, 28)}
-      <Land pid={pid} />
+      {renderLand(11)}
       {renderFence(29, true, 29)}
-      <Land pid={pid} />
+      {renderLand(12)}
       {renderFence(30, true, 30)}
-      <Land pid={pid} />
+      {renderLand(13)}
       {renderFence(31, true, 31)}
-      <Land pid={pid} />
+      {renderLand(14)}
       {renderFence(32, true, 32)}
-      <Land pid={pid} />
+      {renderLand(15)}
       {renderFence(33, true, 33)}
       <Empty />
       

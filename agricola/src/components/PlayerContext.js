@@ -5,10 +5,10 @@ const PlayerContext = createContext();
 
 // 컨텍스트 제공자 컴포넌트
 export const PlayerProvider = ({ children }) => {
-  const [currentPlayer, setCurrentPlayer] = useState('');
+  const [clickedPlayer, setClickedPlayer] = useState('');
 
   return (
-    <PlayerContext.Provider value={{ currentPlayer, setCurrentPlayer }}>
+    <PlayerContext.Provider value={{ clickedPlayer, setClickedPlayer }}>
       {children}
     </PlayerContext.Provider>
   );

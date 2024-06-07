@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-// MUI 불러오기\
+// MUI 불러오기
 import { styled, useTheme } from "@mui/material/styles";
 
 // 보드 컴포넌트 불러오기
@@ -42,8 +42,10 @@ const ResourceBoard = () => {
   // 보드 정보 백엔드에게 받아오기
   const handleMessageReceived = (message) => {
     console.log('Message received from server:', message);
-    if (message.resources) {
+    if (Array.isArray(message.resources)) {
       setResources(message.resources);
+    } else {
+      console.error('Invalid resources format received from server');
     }
   };
 
@@ -67,7 +69,7 @@ const ResourceBoard = () => {
             key={index}
             style={{ display: "flex", justifyContent: "space-around" }}
           >
-            {resources.slice(index * 2, (index + 1) * 2).map((resource) => (
+            {(Array.isArray(resources) ? resources : []).slice(index * 2, (index + 1) * 2).map((resource) => (
               <Resource
                 key={resource.name}
                 name={resource.name}

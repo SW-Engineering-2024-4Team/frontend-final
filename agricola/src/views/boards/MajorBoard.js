@@ -1,14 +1,37 @@
-import React from 'react';
-
-// MUI 불러오기
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-// 주요 설비 카드 불러오기
-import MajorCard from '../cards/MajorCard'
+import MajorCard from '../cards/MajorCard';
+import { useDeckCard1, useDeckCard2, useDeckCard3, useDeckCard4 } from '@/components/CardContext';
 
-const MajorBoard = () => {
- 
+
+const MajorBoard = ({ currentPlayer, handleClick }) => {
+  const initialMajorCards = [
+    { cardNumber: 1, cardType: 'major' },
+    { cardNumber: 2, cardType: 'major' },
+    { cardNumber: 3, cardType: 'major' },
+    { cardNumber: 4, cardType: 'major' },
+    { cardNumber: 5, cardType: 'major' },
+    { cardNumber: 6, cardType: 'major' },
+  ];
+  const [majorCards, setMajorCards] = useState(initialMajorCards); // 상태와 상태 설정 함수를 반환
+
+  const { deckCard1, setDeckCard1 } = useDeckCard1();
+  const { deckCard2, setDeckCard2 } = useDeckCard2();
+  const { deckCard3, setDeckCard3 } = useDeckCard3();
+  const { deckCard4, setDeckCard4 } = useDeckCard4();
+
+  const handleMajorCardClick = ({ cardType, cardNumber }) => {
+    setMajorCards((prevList) => prevList.filter((item) => item.cardNumber !== cardNumber));
+    
+    const clickedCard = majorCards.find((item) => item.cardNumber === cardNumber);
+    
+    if (clickedCard) {
+      setDeckCard1((prevList) => [...prevList, clickedCard]);
+    }
+  };
+
   return (
     <Box
       height={420}
@@ -22,10 +45,14 @@ const MajorBoard = () => {
       sx={{ border: '2px solid grey' }}
     >
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-        {Array.from(Array(6)).map((_, index) => (
-          <Grid item xs={2} sm={4} md={4} key={index}>
-            <MajorCard  number={index+1} index={index} />
-            </Grid>
+        {majorCards.map((item) => (
+          <Grid item xs={2} sm={4} md={4} key={item.cardNumber}>
+            <MajorCard 
+              cardNumber={item.cardNumber}
+              onClick={() => handleMajorCardClick(item)} 
+              isGrayscale={false} // Default value, you can change it based on your logic
+            />
+          </Grid>
         ))}
       </Grid>
     </Box>
