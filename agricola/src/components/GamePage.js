@@ -8,7 +8,8 @@ import RoundBoard from '../views/boards/RoundBoard';
 import CurrentBoard from '../views/boards/CurrentBoard';
 import ResourceBoard from '../views/boards/ResourceBoard';
 import PersonalBoard from '../views/boards/PersonalBoard2';
-import CardDeckBoard from '../views/boards/CardDeckBoard'
+import OwnBoard from '../views/boards/OwnBoard';
+import TriggerBoard from '../views/boards/TriggerBoard';
 
 // 팝업 버튼 불러오기
 import MajorPopUp from '../components/buttons/MajorPopUp';
@@ -92,8 +93,9 @@ function GamePage({ currentPlayer }) {
         <Grid container spacing={1}>
           <ResourceBoard clickedPlayer={clickedPlayer} />
           <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
-          <Grid item xs>
-            <CardDeckBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+          <Grid> 
+            <TriggerBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+            <OwnBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
           </Grid>
         </Grid>
         <WebSocketClient

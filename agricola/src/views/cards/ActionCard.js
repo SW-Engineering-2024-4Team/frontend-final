@@ -41,7 +41,7 @@ export default function ActionCard({ cardNumber, resource, playerNumber, onClick
     <div>
       <Tooltip title={actionCardDetails[cardNumber - 1]}>
         <Card 
-          sx={{ maxWidth: 130 }} 
+          sx={{ maxWidth: 130, borderRadius: 2}} 
           onMouseEnter={handleCardHover}
           onMouseLeave={handleCardLeave}
         >
