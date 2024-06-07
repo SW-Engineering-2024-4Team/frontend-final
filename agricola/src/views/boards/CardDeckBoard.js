@@ -1,54 +1,73 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClient 불러오기
 
 import TriggerBoard from './TriggerBoard';
 import OwnBoard from './OwnBoard';
-import MajorBoard from './MajorBoard';
 
-const CardDeckBoard = () => {
+const CardDeckBoard = ( currentPlayer, clickedPlayer ) => {
   const [ownList, setOwnList] = useState([
     { id: 1, type: 'minor', content: 'Minor Card 1' },
     { id: 2, type: 'work', content: 'Work Card 1' },
     { id: 3, type: 'minor', content: 'Minor Card 2' },
     { id: 4, type: 'work', content: 'Work Card 2' },
-    { id: 5, type: 'minor', content: 'Minor Card 3' },
-    { id: 6, type: 'work', content: 'Work Card 3' },
-    // { id: 7, type: 'major', content: 'Major Card 1' },
-    // { id: 8, type: 'major', content: 'Major Card 2' },
   ]);
-
   const [triggerList, setTriggerList] = useState([]);
+  const sendMessageRef = useRef(null);
 
-  const [isMajorBoardOpen, setIsMajorBoardOpen] = useState(false);
+  // 웹소켓 메시지 처리 함수
+  const handleMessageReceived = (message) => {
+    // Handle incoming messages
+    console.log('Received message:', message);
+  };
 
-  const handleOwnCardClick = (id) => {
+  const handleOwnCardClick = (id) => { 
     setOwnList((prevList) => prevList.filter((card) => card.id !== id));
-    const clickedCard = ownList.find((card) => card.id === id);
-    if (clickedCard) {
-      setTriggerList((prevList) => [...prevList, clickedCard]);
-    }
+    if (currentPlayer == clickedPlayer) {
+      const clickedCard = ownList.find((card) => card.id === id);
+      if (clickedCard) {
+        setTriggerList((prevList) => [...prevList, clickedCard]);
+      }
+    }   
   };
 
-  const handleMajorCardClick = (index, cardNumber) => {
-    const newCard = { id: cardNumber, type: 'major', playerNumber: 1, index, content: `Major Card ${cardNumber}` };
-    setTriggerList((prevList) => [...prevList, newCard]);
-  };
+  // 현재 플레이어에 기반하여 보드를 렌더링합니다.
+  const renderPlayerBoard = () => {
+    return (
+      <Box>
+        <TriggerBoard 
+          triggerList={triggerList} 
+          setTriggerList={setTriggerList} 
+        />
+        <OwnBoard 
+          ownList={ownList} 
+          setOwnList={setOwnList} 
+          handleClick={handleOwnCardClick}
+        />
+      </Box>
+    );
+  }
+
 
   return (
     <Box
       alignItems="flex-start"
       justifyContent="flex-start"
-      height={475}
-      width={485}
+      height={420}
+      width={688}
     >
-      <Modal
-        open={isMajorBoardOpen}
-        onClose={() => setIsMajorBoardOpen(false)}
-        aria-labelledby="major-board-modal"
-        aria-describedby="major-board-modal-description"
-      >
+      <WebSocketClient
+        roomId="1"
+        playerId={currentPlayer}
+        onMessageReceived={handleMessageReceived}
+        ref={(client) => {
+          if (client) {
+            sendMessageRef.current = client.sendMessage;
+          }
+        }}
+      />
+      <Modal>
         <Box
           display="flex"
           justifyContent="center"
@@ -57,18 +76,9 @@ const CardDeckBoard = () => {
           bgcolor="background.paper"
           p={4}
         >
-          <MajorBoard handleClick={handleMajorCardClick} />
+          {renderPlayerBoard()}
         </Box>
       </Modal>
-      <TriggerBoard
-        triggerList={triggerList}
-        setTriggerList={setTriggerList}
-      />
-      <OwnBoard
-        ownList={ownList}
-        setOwnList={setOwnList}
-        handleClick={handleOwnCardClick}
-      />
     </Box>
   );
 };
