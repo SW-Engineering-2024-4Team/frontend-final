@@ -10,10 +10,11 @@ const OwnBoard = ({ ownList, handleClick }) => {
         display="flex"
         alignItems="flex-start"
         justifyContent="flex-start"
+        backgroundColor="rgba(255, 255, 255, 0.8)"
         gap={2}
         p={4}
         sx={{
-          border: '2px solid grey',
+          borderRadius: 4, 
           overflowX: 'auto',
           overflowY: 'hidden',
           '&::-webkit-scrollbar': { display: 'none' },
