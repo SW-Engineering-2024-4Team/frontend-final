@@ -2,17 +2,21 @@ import React, { useState, useRef } from 'react';
 import WebSocketClient from './WebSocketClient';
 
 const WebSocketPage = () => {
-  const initialPlayers = ['고도희', '정지윤', '김윤재', '이수빈'];
+  const initialPlayers = [
+    { id: '1', name: 'John' },
+    { id: '2', name: 'Alice' },
+    { id: '3', name: 'Bob' },
+    { id: '4', name: 'Emily' }
+  ];
   const [players] = useState(initialPlayers);
 
-  const sendMessageRef = useRef(null); // WebSocketClient 참조를 위한 ref
+  const sendMessageRef = useRef(null);
 
-  // 백엔드에게 메시지 전송
   const handleSendMessage = () => {
     if (sendMessageRef.current) {
       const messageJSON = JSON.stringify({ players });
       sendMessageRef.current('/app/room/1/start', messageJSON);
-      console.log('SEND INIT');
+      console.log('SEND INIT', messageJSON);
     }
   };
 

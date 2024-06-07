@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import GamePage from "../components/GamePage";
 import LoginPage from "../components/LoginPage";
 import WebSocketClient from "../components/WebSocketClient";
+import { PlayerProvider } from '@/components/PlayerContext';
 
 let socket;
 
@@ -22,7 +23,9 @@ export default function Room() {
   const [players, setPlayers] = useState([]); // 플레이어 목록 상태
 
   const webSocketClientRef = useRef(null); // 웹소켓 클라이언트 레퍼런스
+  const sendMessageRef = useRef(null); // 메시지 전송 함수 레퍼런스
 
+  // 컴포넌트가 마운트될 때 및 name과 room 변경될 때 실행
   useEffect(() => {
     if (!socket && name && room) {
       socketInitializer(name, room);
@@ -38,27 +41,25 @@ export default function Room() {
         path: '/api/socket',
       });
 
+      // 소켓 연결 시 실행
       socket.on("connect", () => {
         console.log('서버에 연결됨');
         if (name_ && room_) joinRoom(room_, name_);
       });
 
+      // 서버로부터 플레이어 ID 할당 받음
       socket.on('assignId', (id) => {
         console.log('플레이어 ID 할당됨:', id); // 디버깅을 위한 로그
         setPlayerId(id);
       });
 
+      // 게임 시작 이벤트 수신
       socket.on('startGame', (playerList) => {
         console.log('게임 시작됨');
         setIsGameStarted(true);
-        setPlayers(playerList);
-
-        // 게임이 시작하면 백엔드에 메시지 보내기
-        if (webSocketClientRef.current) {
-          webSocketClientRef.current.sendMessage(`/app/room/1/start`, JSON.stringify(playerList));
-        }
       });
 
+      // 메시지 수신 이벤트
       socket.on('receiveMessage', (msg) => {
         console.log('메시지 수신됨:', msg); // 디버깅을 위한 로그
         setMessages((prevMessages) => [...prevMessages, msg]);
@@ -73,7 +74,11 @@ export default function Room() {
   const sendMessage = (text) => {
     if (text.trim()) {
       const msg = { playerId, text };
-      socket.emit('sendMessage', msg);
+      if (sendMessageRef.current) {
+        sendMessageRef.current(msg); // WebSocketClient를 통한 메시지 전송
+      } else {
+        socket.emit('sendMessage', msg); // 소켓을 통한 메시지 전송
+      }
       setMessage('');
     }
   };
@@ -88,13 +93,26 @@ export default function Room() {
   // 게임 화면을 렌더링하는 함수
   const displayGame = () => {
     return (
-      <GamePage 
-        currentPlayer={playerId}
-        sendMessage={sendMessage}
-        messages={messages}
-        message={message}
-        setMessage={setMessage}
-      />
+      <div>
+        <PlayerProvider>
+        <WebSocketClient
+          roomId="1"
+          onMessageReceived={(message) => console.log('Received message:', message)}
+          ref={(client) => {
+            if (client) {
+              sendMessageRef.current = client.sendMessage;
+            }
+          }}
+        />
+        <GamePage 
+          currentPlayer={playerId}
+          sendMessage={sendMessage}
+          messages={messages}
+          message={message}
+          setMessage={setMessage}
+        />
+        </PlayerProvider>
+      </div>
     );
   };
 
@@ -108,6 +126,7 @@ export default function Room() {
     );
   }
 
+  // 경로에 따라 다른 화면을 렌더링
   switch (path) {
     case "game":
       return displayGame();

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
-// MUI 불러오기
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -11,10 +10,11 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { blue, green, red, yellow } from '@mui/material/colors';
 import Badge from '@mui/material/Badge';
+import { usePlayer } from '../../components/PlayerContext';
 
 const settings = ['PersonalBoard'];
 
-//선 표시(뱃지)
+// 선 표시(뱃지)
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     backgroundImage: `url("../../image/Profile/playerFirst.png")`, // 뱃지 이미지 경로 설정
@@ -27,17 +27,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-let clickedPlayer = ''; // 클릭된 플레이어를 저장할 변수
-
-export const setClickedPlayer = (player) => {
-  clickedPlayer = player;
-};
-
-export const getClickedPlayer = () => {
-  return clickedPlayer;
-};
-
 const ProfileCard = ({ currentPlayer, name, profileImage, profileNum, isFirstPlayer }) => {
+  const { setClickedPlayer } = usePlayer();
+
   // 테두리 색 정하기
   const getColor = () => {
     const colors = [green[500], red[500], blue[500], yellow[500]];
@@ -52,7 +44,7 @@ const ProfileCard = ({ currentPlayer, name, profileImage, profileNum, isFirstPla
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
     setClickedPlayer(currentPlayer);
-    console.log(getClickedPlayer());
+    console.log(currentPlayer);
   };
 
   const handleCloseUserMenu = () => {

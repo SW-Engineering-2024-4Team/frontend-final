@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-// MUI 불러오기
+import React, { useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 
 // 보드판 불러오기
@@ -19,16 +17,19 @@ import SettingPopUp from '../components/buttons/SettingPopUp';
 import ChatPopUp from '../components/buttons/ChatPopUp';
 
 // 컨텍스트 관련 불러오기
-import { PlayerProvider, usePlayer } from './PlayerContext';
+import { usePlayer } from './PlayerContext';
 
-function GamePage({currentPlayer}) {
+function GamePage({ currentPlayer }) {
+  const { clickedPlayer } = usePlayer();
 
-  const clickedPlayer = useState('');
+  useEffect(() => {
+    console.log('Clicked player:', clickedPlayer);
+  }, [clickedPlayer]);
 
   return (
     <Grid>
       <Grid container spacing={1}>
-        <CurrentBoard />  
+        <CurrentBoard />
         <MajorPopUp currentPlayer={currentPlayer} />
         <SettingPopUp />
         <ChatPopUp currentPlayer={currentPlayer} />
@@ -52,11 +53,4 @@ function GamePage({currentPlayer}) {
   );
 }
 
-// PlayerProvider로 GamePage를 래핑하여 currentPlayer 값을 제공
-export default function App(props) {
-  return (
-    <PlayerProvider>
-      <GamePage {...props} />
-    </PlayerProvider>
-  );
-}
+export default GamePage;

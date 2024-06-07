@@ -5,7 +5,7 @@ import Land from '../../components/personal/Land';
 import Empty from '../../components/personal/Empty';
 import WebSocketClient from '../../components/WebSocketClient'; // WebSocketClient 불러오기
 
-export default function PersonalBoard2({ pid, currentPlayer }) {
+export default function PersonalBoard2({ pid, currentPlayer, clickedPlayer }) {
   const [fencePosition, setFencePosition] = useState(Array(39).fill(false));
   const sendMessageRef = useRef(null);
 
@@ -31,7 +31,7 @@ export default function PersonalBoard2({ pid, currentPlayer }) {
 
   const renderFence = (ratio, isVertical, index) => (
     <Fence
-      currentPlayer={3}
+      currentPlayer={clickedPlayer}
       ratio={ratio}
       isVertical={isVertical}
       isActive={isFenceActive(index)}
