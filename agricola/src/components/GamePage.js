@@ -27,9 +27,19 @@ import { usePlayer } from './PlayerContext';
 function GamePage({ currentPlayer }) {
   const { clickedPlayer } = usePlayer();
   
+  const [color, setColor] = useState('');
 
   useEffect(() => {
     console.log('Clicked player:', clickedPlayer);
+    if (clickedPlayer == 1) {
+      setColor('#BEDE9ECC');
+    } else if (clickedPlayer == 2) {
+      setColor('#DE9E9ECC');
+    } else if (clickedPlayer == 3) {
+      setColor('#8D85EECC');
+    } else if (clickedPlayer == 4) {
+      setColor('#DCDE9ECC');
+    }
   }, [clickedPlayer]);
 
   const [open, setOpen] = useState(false);
@@ -85,13 +95,13 @@ function GamePage({ currentPlayer }) {
           <ChatPopUp currentPlayer={currentPlayer} />
         </Grid>
 
-        <Grid container spacing={1}>
+        <Grid container spacing={1} >
           <ProfileBoard clickedPlayer={clickedPlayer} />
           <ActionBoard currentPlayer={currentPlayer} />
           <RoundBoard currentPlayer={currentPlayer} />
         </Grid>
 
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{ borderColor: color }} >
           <ResourceBoard clickedPlayer={clickedPlayer} />
           <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
           <Grid> 
