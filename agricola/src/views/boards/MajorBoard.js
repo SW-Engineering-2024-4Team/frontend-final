@@ -5,17 +5,17 @@ import Grid from '@mui/material/Grid';
 import MajorCard from '../cards/MajorCard';
 import { useDeckCard1, useDeckCard2, useDeckCard3, useDeckCard4 } from '@/components/CardContext';
 
+const initialMajorCards = [
+  { cardNumber: 1, cardType: 'major' },
+  { cardNumber: 2, cardType: 'major' },
+  { cardNumber: 3, cardType: 'major' },
+  { cardNumber: 4, cardType: 'major' },
+  { cardNumber: 5, cardType: 'major' },
+  { cardNumber: 6, cardType: 'major' },
+];
 
 const MajorBoard = ({ currentPlayer, handleClick }) => {
-  const initialMajorCards = [
-    { cardNumber: 1, cardType: 'major' },
-    { cardNumber: 2, cardType: 'major' },
-    { cardNumber: 3, cardType: 'major' },
-    { cardNumber: 4, cardType: 'major' },
-    { cardNumber: 5, cardType: 'major' },
-    { cardNumber: 6, cardType: 'major' },
-  ];
-  const [majorCards, setMajorCards] = useState(initialMajorCards); // 상태와 상태 설정 함수를 반환
+  const [majorCards, setMajorCards] = useState(initialMajorCards);
 
   const { deckCard1, setDeckCard1 } = useDeckCard1();
   const { deckCard2, setDeckCard2 } = useDeckCard2();
