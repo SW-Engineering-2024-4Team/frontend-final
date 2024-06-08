@@ -61,6 +61,8 @@ const OwnBoard = ({ currentPlayer }) => {
         '&::-webkit-scrollbar': { display: 'none' },
         '-ms-overflow-style': 'none',
         scrollbarWidth: 'none',
+        // backgroundColor: '#87C748',
+        // borderRadius: 3
       }}
     >
       {ownCards.map((item) => {

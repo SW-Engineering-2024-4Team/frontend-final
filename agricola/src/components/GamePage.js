@@ -27,9 +27,19 @@ import { usePlayer } from './PlayerContext';
 function GamePage({ currentPlayer }) {
   const { clickedPlayer } = usePlayer();
   
+  const [color, setColor] = useState('');
 
   useEffect(() => {
     console.log('Clicked player:', clickedPlayer);
+    if (clickedPlayer == 1) {
+      setColor('#BEDE9ECC');
+    } else if (clickedPlayer == 2) {
+      setColor('#DE9E9ECC');
+    } else if (clickedPlayer == 3) {
+      setColor('#8D85EECC');
+    } else if (clickedPlayer == 4) {
+      setColor('#DCDE9ECC');
+    }
   }, [clickedPlayer]);
 
   const [open, setOpen] = useState(false);
@@ -71,27 +81,33 @@ function GamePage({ currentPlayer }) {
       backgroundImage: 'url("../image/background.png")', // 배경 이미지 경로에 따라 수정
       backgroundSize: '2000px', // 배경 이미지 크기 조절
       backgroundRepeat: 'repeat', // 배경 이미지 반복 설정
+      justifyContent: "center",
       top: 0,
       left: 0,
       bottom: 0,
       right: 0,
       minHeight: '1500px', // 최소 높이 설정
     }}>
-      <Grid>
-        <Grid container spacing={1}>
-          <CurrentBoard />
+      <Grid 
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        >
+        <Grid container spacing={-4}>
+          <CurrentBoard currentPlayer={currentPlayer} />
           <MajorPopUp currentPlayer={currentPlayer} />
           <SettingPopUp />
           <ChatPopUp currentPlayer={currentPlayer} />
         </Grid>
 
-        <Grid container spacing={1}>
+        <Grid container spacing={1} >
           <ProfileBoard clickedPlayer={clickedPlayer} />
           <ActionBoard currentPlayer={currentPlayer} />
           <RoundBoard currentPlayer={currentPlayer} />
         </Grid>
 
-        <Grid container spacing={1}>
+        <Grid container spacing={1} >
           <ResourceBoard clickedPlayer={clickedPlayer} />
           <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
           <Grid> 
