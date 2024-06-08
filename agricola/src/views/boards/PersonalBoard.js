@@ -376,7 +376,7 @@ const PersonalBoard = ({ clickedPlayer }) => {
   return (
     <Box
       height={450}
-      width={700}
+      width={810}
       display="grid"
       gridTemplateColumns="repeat(5, 1fr)"
       gridTemplateRows="repeat(3, 1fr)"
@@ -510,8 +510,20 @@ const PersonalBoard = ({ clickedPlayer }) => {
         );
       })}
       {actionType === "fence" && selectedPositions.length > 0 && (
-        <Button onClick={handleSendFencePositions}>Fence!!</Button>
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            right: 16,
+            zIndex: 1,
+          }}
+        >
+          <Button variant="contained" onClick={handleSendFencePositions}>
+            Fence!!
+          </Button>
+        </Box>
       )}
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Choose Modification</DialogTitle>
         <DialogContent>
