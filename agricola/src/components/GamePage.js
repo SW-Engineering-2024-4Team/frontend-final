@@ -81,15 +81,21 @@ function GamePage({ currentPlayer }) {
       backgroundImage: 'url("../image/background.png")', // 배경 이미지 경로에 따라 수정
       backgroundSize: '2000px', // 배경 이미지 크기 조절
       backgroundRepeat: 'repeat', // 배경 이미지 반복 설정
+      justifyContent: "center",
       top: 0,
       left: 0,
       bottom: 0,
       right: 0,
       minHeight: '1500px', // 최소 높이 설정
     }}>
-      <Grid>
-        <Grid container spacing={1}>
-          <CurrentBoard />
+      <Grid 
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        >
+        <Grid container spacing={-4}>
+          <CurrentBoard currentPlayer={currentPlayer} />
           <MajorPopUp currentPlayer={currentPlayer} />
           <SettingPopUp />
           <ChatPopUp currentPlayer={currentPlayer} />
@@ -101,7 +107,7 @@ function GamePage({ currentPlayer }) {
           <RoundBoard currentPlayer={currentPlayer} />
         </Grid>
 
-        <Grid container spacing={1} sx={{ borderColor: color }} >
+        <Grid container spacing={1} >
           <ResourceBoard clickedPlayer={clickedPlayer} />
           <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
           <Grid> 
