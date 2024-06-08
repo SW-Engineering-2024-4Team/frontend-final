@@ -24,6 +24,9 @@ import WebSocketPage from './WebSocketPage';
 // 컨텍스트 관련 불러오기
 import { usePlayer } from './PlayerContext';
 
+// 게임 완료 화면 불러오기
+import GameResultTable from '../views/GameResultTable';
+
 function GamePage({ currentPlayer }) {
   const { clickedPlayer } = usePlayer();
   
@@ -43,6 +46,7 @@ function GamePage({ currentPlayer }) {
   }, [clickedPlayer]);
 
   const [open, setOpen] = useState(false);
+  const [resultOpen, setResultOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(true);
@@ -51,6 +55,15 @@ function GamePage({ currentPlayer }) {
   const handleClose = () => {
     setOpen(false);
   };
+  
+  const handleResultClick = () => {
+    setResultOpen(true);
+  };
+
+  const handleResultClose = () => {
+    setResultOpen(false);
+  };
+
 
   // playerChoice 관련해서 백엔드에게 받는 내용
   const [choiceType, setChoiceType] = useState('');
@@ -132,6 +145,8 @@ function GamePage({ currentPlayer }) {
             currentPlayer={currentPlayer}
         />
         </button>
+        <button onClick={handleResultClick}>resultTest</button>
+        {resultOpen && <GameResultTable open={resultOpen} onClose={handleResultClose} />}
         <WebSocketPage 
           roomId="1" 
           message="아 진짜 아그리콜라 귀낯ㅎ"
