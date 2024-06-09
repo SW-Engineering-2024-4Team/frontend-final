@@ -18,6 +18,7 @@ export const ComponentProvider = ({ children }) => {
   const [positions, setPositions] = useState('');
   const [pos, setPos] = useState([]);
   const [choiceType, setChoiceType] = useState('');
+  const [options, setOptions] = useState('');
   const [choice, setChoice] = useState(0);
   const [chosenResource, setChosenResource] = useState('');
   const [timing, setTiming] = useState('');
@@ -43,6 +44,7 @@ export const ComponentProvider = ({ children }) => {
       positions, setPositions,
       pos, setPos,
       choiceType, setChoiceType,
+      options, setOptions,
       choice, setChoice,
       chosenResource, setChosenResource,
       timing, setTiming,
@@ -121,6 +123,14 @@ export const useChoiceType = () => {
   }
   return { choiceType: context.choiceType, setChoiceType: context.setChoiceType };
 };
+
+export const useOptions = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('options must be used within a Provider');
+  }
+  return { options: context.options, setOptions: context.setOptions };
+}
 
 export const useChoice = () => {
   const context = useContext(Context);
