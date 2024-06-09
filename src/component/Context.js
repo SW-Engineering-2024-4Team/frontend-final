@@ -14,6 +14,7 @@ export const ComponentProvider = ({ children }) => {
   const [playerId, setPlayerId] = useState('');
 
   // 추가 요청
+  const [firstPlayer, setFirstPlayer] = useState('');
   const [animalType, setAnimalType] = useState('');
   const [positions, setPositions] = useState('');
   const [pos, setPos] = useState([]);
@@ -53,6 +54,7 @@ export const ComponentProvider = ({ children }) => {
 
       cardType, setCardType, 
       clickedPlayer, setClickedPlayer, 
+      firstPlayer, setFirstPlayer,
 
       deckCard1, setDeckCard1, 
       deckCard2, setDeckCard2, 
@@ -94,6 +96,14 @@ export const usePlayerId = () => {
 };
 
 // 추가 요청
+export const useFirstPlayer = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('firstPlayer must be used within a Provider');
+  }
+  return { firstPlayer: context.firstPlayer, setFirstPlayer: context.setFirstPlayer };
+};
+
 export const useAnimalType = () => {
   const context = useContext(Context);
   if (!context) {

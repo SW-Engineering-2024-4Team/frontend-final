@@ -23,7 +23,7 @@ import DialogChoiceCard from './cards/DialogChoiceCard';
 
 // 컨텍스트 불러오기
 import { useAnimalType, useCardId, useCardType, useChoice, useChoiceType, useChosenResource, useOptions, usePlayer, usePositions, usePos, useTiming } from '../component/Context';
-import { usePlayerList, usePlayerId, useActionType } from '../component/Context';
+import { usePlayerList, usePlayerId, useActionType, useFirstPlayer } from '../component/Context';
 import { usePlayerPostions, useValidPostions } from '../component/ReceiveContext';
 
 function GamePage({ currentPlayer }) {
@@ -32,9 +32,10 @@ function GamePage({ currentPlayer }) {
   const [gameState, setGameState] = useState('');
 
   const { clickedPlayer, setClickedPlayer } = usePlayer(); // 프로필을 클릭한 사람
-  const { cardId, setCardId } = useCardId();
+  const { cardId, setCardId } = useCardId(); // 클릭된 카드 아이디
   const { cardType, setCardType } = useCardType();
   const { actionType, setActionType } = useActionType();
+  const { firstPlayer, setFirstPlayer } = useFirstPlayer(); 
   
   const { playerList, setPlayerList } = usePlayerList();
   const { playerId, setPlayerId} = usePlayerId();
@@ -132,9 +133,12 @@ function GamePage({ currentPlayer }) {
 
   // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
   const handleGameState = (message) => {
+    console.log('/topic/game에서 받아오는 정보', message);
+
     if (message.playerId) {
       console.log('현재 차례인 플레이어 정보', message.playerId);
       setPlayerId(message.playerId);
+      setFirstPlayer(message.playerId);
     }
     if (message.availableCards) {
       console.log('가능한 액션 카드 칸', message.availableCards);
@@ -179,9 +183,12 @@ function GamePage({ currentPlayer }) {
       setValidPositions(message.validPositions);
     }
 
-    if (message.actionType) {
+    if (message.actionType && message.playerId) {
       console.log('개인 보드 행동 타입', message.actionType);
       setActionType(message.actionType);
+      if(actionType == 'becomeFirstPlayer') {
+        setFirstPlayer(message.playerId);
+      }
     }
 
   };
@@ -264,13 +271,13 @@ function GamePage({ currentPlayer }) {
         >
           <Grid container spacing={1}>
             <Typography>플레이어 프로필 클릭시 개인보드와 자원보드가 변경됩니다.</Typography>
-            <ProfileCard playerNumber={1}  isFirstPlayer={true}/>
+            <ProfileCard playerNumber={1}  isFirstPlayer={firstPlayer === 1}/>
             <Typography>고도희</Typography>
-            <ProfileCard playerNumber={2}  isFirstPlayer={false}/>
+            <ProfileCard playerNumber={2}  isFirstPlayer={firstPlayer === 2}/>
             <Typography>정지윤</Typography>
-            <ProfileCard playerNumber={3}  isFirstPlayer={false}/>
+            <ProfileCard playerNumber={3}  isFirstPlayer={firstPlayer === 3}/>
             <Typography>김윤재</Typography>
-            <ProfileCard playerNumber={4}  isFirstPlayer={false}/>
+            <ProfileCard playerNumber={4}  isFirstPlayer={firstPlayer === 4}/>
             <Typography>이수빈</Typography>
 
             <MajorPopUp 
