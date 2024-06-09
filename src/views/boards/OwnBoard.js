@@ -31,6 +31,24 @@ const OwnBoard = ({ currentPlayer }) => {
     }
   }
 
+  function transformCard(card) {
+    let cardType = '';
+    let cardNumber = 0;
+
+    if (card.id >= 21 && card.id <= 26) {
+      cardType = 'major';
+      cardNumber = card.id - 20;
+    } else if (card.id >= 27 && card.id <= 34) {
+      cardType = 'work';
+      cardNumber = card.id - 26;
+    } else if (card.id >= 35 && card.id <= 42) {
+      cardType = 'minor';
+      cardNumber = card.id - 34;
+    }
+
+    return { cardNumber, cardType };
+  }
+
   const initialOwnCards = [
     { cardNumber: 1, cardType: 'work' },
     { cardNumber: 2, cardType: 'work' },
@@ -41,6 +59,12 @@ const OwnBoard = ({ currentPlayer }) => {
   ];
   
   const [ownCards, setOwnCards] = useState(initialOwnCards); // 상태와 상태 설정 함수를 반환
+
+  const handleAddCards = () => {
+    const transformedCards = exchangableCards.map(card => transformCard(card));
+    setOwnCards(transformedCards);
+  };
+
 
   const handleOwnCardClick = ({ cardType, cardNumber }) => {
     setOwnCards((prevList) => prevList.filter((item) => item.cardNumber !== cardNumber));
