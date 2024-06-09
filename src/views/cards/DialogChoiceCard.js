@@ -8,63 +8,56 @@ import ChoiceCard from './ChoiceCard';
 import { useCardId, useCardType, useChoice } from '../../component/Context';
 
 function DialogChoiceCard({ cardNumber, open, onClose, currentPlayer, onClick }) {
+
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();
   const { choice, setChoice } = useChoice();
 
   const [cardName, setCardName] = useState('');
   const [count, setCount] = useState([]);
-  const [rtn, setRtn] = useState([]);
 
   useEffect(() => {
     switch (cardNumber) {
       case 7:
         setCardName('농장 확장');
-        setCount([1, 2, 3]);
-        setRtn([0, 1, 2]);
+        setCount([0, 1, 2]);
         break;
       case 8:
         setCardName('회합 장소');
-        setCount([1, 2, 3]);
-        setRtn([0, 1, 2]);
+        setCount([0, 1, 2]);
         break;
       case 1:
         setCardName('곡식 활용');
-        setCount([1, 2, 3]);
-        setRtn([0, 1, 2]);
+        setCount([0, 1, 2]);
         break;
       case 4:
         setCardName('주요 설비');
-        setCount([1, 2]);
-        setRtn([true, false]);
+        setCount([true, false]);
         break;
       case 5:
         setCardName('기본 가족 늘리기');
-        setCount([1, 2]);
-        setRtn([true, false]);
+        setCount([true, false]);
         break;
       case 6:
         setCardName('농장 개조');
-        setCount([1, 2]);
-        setRtn([true, false]);
+        setCount([true, false]);
         break;
       default:
         setCardName('');
         setCount([]);
-        setRtn([]);
         break;
     }
   }, [cardNumber]);
 
-  const handleCardClick = ({ rtn, index }) => {
+  const handleCardClick = (index) => {
     console.log(`${currentPlayer}번 플레이어가 추가선택카드 ${cardNumber}-${index}번을 클릭했습니다.`);
 
-    setChoice(rtn[index - 1]);
+    setChoice(index);
     setCardType('choice');
     handleClose();
 
     if (typeof onClick === 'function') {
-      onClick(rtn, index);
+      onClick(index);
     }
   };
 
@@ -87,9 +80,8 @@ function DialogChoiceCard({ cardNumber, open, onClose, currentPlayer, onClick })
           <ChoiceCard
             key={index}
             cardNumber={cardNumber}
-            rtn={rtn[index - 1]}
             index={index}
-            onClick={() => handleCardClick({ rtn, index })}
+            onClick={(index) => handleCardClick(index)}
           />
         ))}
       </Box>

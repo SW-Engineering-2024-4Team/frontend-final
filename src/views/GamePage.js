@@ -22,7 +22,7 @@ import MajorPopUp from './MajorPopUp';
 import DialogChoiceCard from './cards/DialogChoiceCard';
 
 // 컨텍스트 불러오기
-import { useCardId, useCardType, usePlayer } from '../component/Context';
+import { useCardId, useCardType, usePlayer, useChoiceType } from '../component/Context';
 import { usePlayerList, usePlayerId } from '../component/Context';
 import { usePlayerPostions } from '../component/ReceiveContext';
 
@@ -38,6 +38,7 @@ function GamePage({ currentPlayer }) {
   const { playerList, setPlayerList } = usePlayerList();
   const { playerId, setPlayerId} = usePlayerId();
   const { playerPositions, setPlayerPositions } = usePlayerPostions();
+  const { choiceType, setChoiceType } = useChoiceType();
 
 
     // 플레이어 리스트 초기화
@@ -140,8 +141,8 @@ function GamePage({ currentPlayer }) {
 
     if (message.choiceType) {
       console.log('선택 타입', message.choiceType);
+      setChoiceType(message.choiceType);
       handleChoiceClick();
-      // setChoiceType(message.choiceType);
     }
 
     if (message.options) {
@@ -168,6 +169,7 @@ function GamePage({ currentPlayer }) {
       console.log('플레이어 자원', message.resources);
       setResources(message.resources);
     }
+
   };
 
   // ** 액션 카드 / 보드
@@ -199,8 +201,8 @@ function GamePage({ currentPlayer }) {
   const handleChoiceClose = () => { setOpenChoice(false); };
 
   // 선택 카드 클릭시 
-  const handleChoiceCardClick = ({ choiceType, rtn, index }) => {
-    selectChoice(choiceType, rtn[index]);
+  const handleChoiceCardClick = (index) => {
+    selectChoice(choiceType, index);
   };
 
   // 주요 설비 카드 팝업창 관리
@@ -219,11 +221,10 @@ function GamePage({ currentPlayer }) {
           
           <DialogChoiceCard
               cardNumber={cardId}
-              choiceType={'choiceType'}
               open={openChoice}
               onClose={handleChoiceClose}
               currentPlayer={currentPlayer}
-              onClick={({ rtn, index }) => handleChoiceCardClick({ rtn, index })}
+              onClick={(index) => handleChoiceCardClick(index)}
           />
         <Box
           height={1010}

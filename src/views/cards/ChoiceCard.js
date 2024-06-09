@@ -4,15 +4,11 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
 
-function ChoiceCard({ cardNumber, rtn, index, onClick, sendMessage }) {
+function ChoiceCard({ cardNumber, index, onClick }) {
 
   const handleClick = () => {
     if (typeof onClick === 'function') {
-      onClick(rtn);
-    }
-    if (typeof sendMessage === 'function') {
-      // `ChoiceCard: cardType ${cardType}, cardNumber ${cardNumber}, index ${index}`
-      sendMessage(rtn);
+      onClick(index);
     }
   };
 
@@ -21,7 +17,7 @@ function ChoiceCard({ cardNumber, rtn, index, onClick, sendMessage }) {
       <CardActionArea onClick={handleClick}>
         <CardMedia
           component="img"
-          image={`../../image/ChoiceCard/choice${cardNumber}-${index}.png`}
+          image={`../../image/ChoiceCard/choice${cardNumber}-${index+1}.png`}
           alt={`ChoiceCard ${cardNumber}`}
         />
       </CardActionArea>
