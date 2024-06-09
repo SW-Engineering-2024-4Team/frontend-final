@@ -7,7 +7,7 @@ const ReceiveContext = createContext();
 export const ReceiveComponentProvider = ({ children }) => {
 
   // 액션보드
-  const [playerPositions, setPlayerPositions] = useState([]);
+  const [playerPositions, setPlayerPositions] = useState([null, null, null, null, null, null, null, null, null, null, null, null, null, null,null, null, null, null, null, null]);
 
   return (
     <ReceiveContext.Provider 

@@ -37,6 +37,7 @@ function GamePage({ currentPlayer }) {
   
   const { playerList, setPlayerList } = usePlayerList();
   const { playerId, setPlayerId} = usePlayerId();
+  const { playerPositions, setPlayerPositions } = usePlayerPostions();
 
 
     // 플레이어 리스트 초기화
@@ -111,48 +112,42 @@ function GamePage({ currentPlayer }) {
     }
   };
 
-  // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
-  const handleGameState = (message) => {
-    if (message.playerId) {
-      console.log('현재 차례인 플레이어 정보', message.playerId);
-      setPlayerId(message.playerId);
-    }
-    if (message.availableCards) {
-      console.log('가능한 액션 카드 칸', message.availableCards);
-    }
-  };
-
   // 클릭된 액션 카드 칸 정보 받아오는 함수
   const handleGameState2 = (message) => {
     if (message.playerPositions) {
       console.log('플레이어 포지션', message.playerPositions);
       setClickedActionCards(message.playerPositions.slice(0, 14));
       setClickedRoundCards(message.playerPositions.slice(14));
-      console.log('액션 보드 플레이어 포지션', clickedActionCards);
-      console.log('라운드 보드 플레이어 포지션', clickedRoundCards);
+      setPlayerPositions(message.playerPositions);
+      // console.log('액션 보드 플레이어 포지션', message.playerPositions.slice(0, 14));
+      // console.log('라운드 보드 플레이어 포지션', message.playerPositions.slice(14));
+      // console.log('액션 보드 플레이어 포지션', clickedActionCards);
+      // console.log('라운드 보드 플레이어 포지션', clickedRoundCards);
     }
   };
 
   // ** 액션 카드 / 보드
   // 0: 사람없음, 1~4: 플레이어 -> 14개 카드
-  const initialClickedActionCards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const initialClickedActionCards = [null, null, null, null, null, null, null, null, null, null, null, null, null, null];
   const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
   
   // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
-  const initialResourceActionCards = [,2,1,,1,,1,,,,,1,1,1,,];
+  const initialResourceActionCards = [2,1,null,1,null,1,null,null,null,null,1,1,1,null];
   const [resourceActionCards, setResourceActionCards] = useState(initialResourceActionCards);
 
   // 액션 카드 클릭시 
   const handleActionCardClick = (cardNumber) => {
     selectCard(cardNumber);
-    const newClickedActionCards = [...clickedActionCards];
-    newClickedActionCards[cardNumber - 1] = currentPlayer;
-    setClickedActionCards(newClickedActionCards);
+    setClickedActionCards(prev => {
+      const newClickedActionCards = [...prev];
+      newClickedActionCards[cardNumber - 1] = currentPlayer;
+      return newClickedActionCards;
+    });
   };
 
   // ** 라운드 카드 / 보드
   // 0: 사람없음, 1~4: 플레이어 -> 6개 카드
-  const initialClickedRoundCards = [2, 1, 3, 4, 0, 0];
+  const initialClickedRoundCards = [null, null, null, null, null, null];
   const [clickedRoundCards, setClickedRoundCards] = useState(initialClickedRoundCards);
   
   // 자원누적이 필요한 카드: 3 번
@@ -166,9 +161,22 @@ function GamePage({ currentPlayer }) {
   // 라운드 카드 클릭시
   const handleRoundCardClick = (cardNumber) => {
     selectCard(cardNumber);
-    const newClickedRoundCards = [...clickedRoundCards];
-    newClickedRoundCards[cardNumber - 1] = currentPlayer;
-    setClickedRoundCards(newClickedRoundCards);
+    setClickedRoundCards(prev => {
+      const newClickedRoundCards = [...prev];
+      newClickedRoundCards[cardNumber - 1] = currentPlayer;
+      return newClickedRoundCards;
+    });
+  };
+
+  // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
+  const handleGameState = (message) => {
+    if (message.playerId) {
+      console.log('현재 차례인 플레이어 정보', message.playerId);
+      setPlayerId(message.playerId);
+    }
+    if (message.availableCards) {
+      console.log('가능한 액션 카드 칸', message.availableCards);
+    }
   };
 
   // ** 주요 설비 카드 / 보드
@@ -195,7 +203,6 @@ function GamePage({ currentPlayer }) {
                 currentPlayer={currentPlayer}
             />
             </button>
-           <pre>{JSON.stringify(clickedActionCards, null, 2)}</pre>
         <Box
           height={1010}
           width={120}
