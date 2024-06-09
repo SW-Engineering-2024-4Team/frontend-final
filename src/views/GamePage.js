@@ -71,12 +71,12 @@ function GamePage({ currentPlayer }) {
       onConnect: (frame) => {
         console.log('Connected: ' + frame);
         client.subscribe('/topic/game', (message) => {
-          console.log('Received message: ' + message.body);
+          console.log('받은 상태 메시지: ' + message.body);
           handleGameState(JSON.parse(message.body));
         });
 
         client.subscribe(`/topic/room/1`, (message) => {
-          console.log('Received card options: ' + message.body);
+          console.log('받은 추가 메시지들: ' + message.body);
           handleGameState2(JSON.parse(message.body));
         });
 
@@ -112,25 +112,59 @@ function GamePage({ currentPlayer }) {
     }
   };
 
+  const selectChoice = (choiceType, choice) => {
+    if (stompClient) {
+      let payload;
+      if (choiceType === 'AndOr') {
+        payload = { playerId: currentPlayer, choiceType: choiceType, choice: choice };
+      } else if (choiceType === 'Then' || choiceType === 'Or') {
+        const booleanChoice = choice === 0;
+        payload = { playerId: currentPlayer, choiceType: choiceType, choice: booleanChoice };
+      }
+      console.log('Selecting choice:', choiceType, choice);
+      stompClient.publish({ destination: '/app/room/1/playerChoice', body: JSON.stringify(payload) });
+    } else {
+      console.error('stompClient is not initialized');
+    }
+  }; 
+
+  // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
+  const handleGameState = (message) => {
+    if (message.playerId) {
+      console.log('현재 차례인 플레이어 정보', message.playerId);
+      setPlayerId(message.playerId);
+    }
+    if (message.availableCards) {
+      console.log('가능한 액션 카드 칸', message.availableCards);
+    }
+  };
+
   // 클릭된 액션 카드 칸 정보 받아오는 함수
   const handleGameState2 = (message) => {
     if (message.playerPositions) {
       console.log('플레이어 포지션', message.playerPositions);
-      setClickedActionCards(message.playerPositions.slice(0, 14));
-      setClickedRoundCards(message.playerPositions.slice(14));
       setPlayerPositions(message.playerPositions);
-      // console.log('액션 보드 플레이어 포지션', message.playerPositions.slice(0, 14));
-      // console.log('라운드 보드 플레이어 포지션', message.playerPositions.slice(14));
-      // console.log('액션 보드 플레이어 포지션', clickedActionCards);
-      // console.log('라운드 보드 플레이어 포지션', clickedRoundCards);
     }
+
+    if (message.choiceType) {
+      console.log('선택 타입', message.choiceType);
+      handleChoiceClick();
+      // setChoiceType(message.choiceType);
+    }
+
+    if (message.options) {
+      console.log('선택들', message.options);
+      // setOptions(message.options);
+    }
+
+    if (message.playerId) {
+      console.log('플레이어 아이디', message.playerId);
+      setPlayerId(message.playerId);
+    }
+
   };
 
   // ** 액션 카드 / 보드
-  // 0: 사람없음, 1~4: 플레이어 -> 14개 카드
-  const initialClickedActionCards = [null, null, null, null, null, null, null, null, null, null, null, null, null, null];
-  const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
-  
   // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
   const initialResourceActionCards = [2,1,null,1,null,1,null,null,null,null,1,1,1,null];
   const [resourceActionCards, setResourceActionCards] = useState(initialResourceActionCards);
@@ -138,11 +172,6 @@ function GamePage({ currentPlayer }) {
   // 액션 카드 클릭시 
   const handleActionCardClick = (cardNumber) => {
     selectCard(cardNumber);
-    setClickedActionCards(prev => {
-      const newClickedActionCards = [...prev];
-      newClickedActionCards[cardNumber - 1] = currentPlayer;
-      return newClickedActionCards;
-    });
   };
 
   // ** 라운드 카드 / 보드
@@ -168,22 +197,20 @@ function GamePage({ currentPlayer }) {
     });
   };
 
-  // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
-  const handleGameState = (message) => {
-    if (message.playerId) {
-      console.log('현재 차례인 플레이어 정보', message.playerId);
-      setPlayerId(message.playerId);
-    }
-    if (message.availableCards) {
-      console.log('가능한 액션 카드 칸', message.availableCards);
-    }
+  // 선택 카드 팝업창 관리
+  const [openChoice, setOpenChoice] = useState(false);
+  const handleChoiceClick = () => { setOpenChoice(true); }; 
+  const handleChoiceClose = () => { setOpenChoice(false); };
+
+  // 선택 카드 클릭시 
+  const handleChoiceCardClick = ({ rtn, index }) => {
+    selectChoice(rtn[index]);
   };
 
-  // ** 주요 설비 카드 / 보드
   // 주요 설비 카드 팝업창 관리
-  const [open, setOpen] = React.useState(false);
-  const handleClick = () => { setOpen(true); }; 
-  const handleClose = () => { setOpen(false); };
+  const [openMajor, setOpenMajor] = useState(false);
+  const handleMajorClick = () => { setOpenMajor(true); }; 
+  const handleMajorClose = () => { setOpenMajor(false); };
 
   return (
       <Grid 
@@ -192,17 +219,16 @@ function GamePage({ currentPlayer }) {
         justifyContent="center"
         alignItems="center"
         >
-           <button id="startGameButton" onClick={startGame}>Start Game</button>
-           <button onClick={handleClick}>
-            ChoiceCard
-            <DialogChoiceCard
-                cardNumber={cardId}
-                choiceType={"AndOr"}
-                open={open}
-                onClose={handleClose}
-                currentPlayer={currentPlayer}
-            />
-            </button>
+          <button id="startGameButton" onClick={startGame}>Start Game</button>
+          
+          <DialogChoiceCard
+              cardNumber={cardId}
+              choiceType={'choiceType'}
+              open={openChoice}
+              onClose={handleChoiceClose}
+              currentPlayer={currentPlayer}
+              onClick={({ rtn, index }) => handleChoiceCardClick({ rtn, index })}
+          />
         <Box
           height={1010}
           width={120}
@@ -227,7 +253,11 @@ function GamePage({ currentPlayer }) {
             <ProfileCard playerNumber={4}  isFirstPlayer={false}/>
             <Typography>이수빈</Typography>
 
-            <MajorPopUp currentPlayer={currentPlayer} />
+            <MajorPopUp 
+              open={openMajor}
+              onClose={handleMajorClose}
+              currentPlayer={currentPlayer} 
+            />
           </Grid>
         </Box>
         <Grid>
@@ -259,7 +289,6 @@ function GamePage({ currentPlayer }) {
           <ActionBoard 
             currentPlayer={currentPlayer} 
             onClick={(cardNumber) => handleActionCardClick(cardNumber)}
-            clickedActionCards={clickedActionCards}
             resourceActionCards={resourceActionCards}
             
           />
@@ -273,7 +302,10 @@ function GamePage({ currentPlayer }) {
         </Grid>
 
         <Grid container spacing={1} >
-          <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+          <PersonalBoard 
+            currentPlayer={currentPlayer} 
+            clickedPlayer={clickedPlayer} 
+          />
           <Grid> 
             <TriggerBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
             <OwnBoard currentPlayer={currentPlayer} />

@@ -127,7 +127,7 @@ export const useChoice = () => {
   if (!context) {
     throw new Error('choice must be used within a Provider');
   }
-  return { choice: context.choice, setChoiceType: context.setChoiceType };
+  return { choice: context.choice, setChoice: context.setChoice };
 };
 
 export const useChosenResource = () => {
