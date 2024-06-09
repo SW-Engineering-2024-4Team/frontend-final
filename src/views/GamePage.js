@@ -231,14 +231,14 @@ function GamePage({ currentPlayer }) {
   const handleMajorClick = () => { setOpenMajor(true); }; 
   const handleMajorClose = () => { setOpenMajor(false); };
 
-  useEffect(() => {
-    if (stompClient && playerList.length === 4) {
-      console.log("useEffect: Calling startGame");
-      startGame();
-    }
-  }, [stompClient]);
+  // useEffect(() => {
+  //   if (stompClient && playerList.length === 4) {
+  //     console.log("useEffect: Calling startGame");
+  //     startGame();
+  //   }
+  // }, [stompClient]);
 
-  console.log("Component rendered!"); // 렌더링 2번되는거 확인
+  // console.log("Component rendered!"); // 렌더링 2번되는거 확인
   
   return (
       <Grid 
