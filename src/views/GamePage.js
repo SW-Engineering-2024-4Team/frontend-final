@@ -7,6 +7,7 @@ import { Client } from '@stomp/stompjs';
 // MUI 불러오기
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 
 // 보드판 불러오기
@@ -23,7 +24,7 @@ import DialogChoiceCard from './cards/DialogChoiceCard';
 
 // 컨텍스트 불러오기
 import { useAnimalType, useCardId, useCardType, useChoice, useChoiceType, useChosenResource, useOptions, usePlayer, usePositions, usePos, useTiming } from '../component/Context';
-import { usePlayerList, usePlayerId, useActionType, useFirstPlayer } from '../component/Context';
+import { usePlayerList, usePlayerId, useActionType, useFirstPlayer, useCurrentRound, useExhangeableCards } from '../component/Context';
 import { usePlayerPostions, useValidPostions } from '../component/ReceiveContext';
 
 function GamePage({ currentPlayer }) {
@@ -33,9 +34,12 @@ function GamePage({ currentPlayer }) {
 
   const { clickedPlayer, setClickedPlayer } = usePlayer(); // 프로필을 클릭한 사람
   const { cardId, setCardId } = useCardId(); // 클릭된 카드 아이디
+  
   const { cardType, setCardType } = useCardType();
   const { actionType, setActionType } = useActionType();
   const { firstPlayer, setFirstPlayer } = useFirstPlayer(); 
+  const { currentRound, setCurrentRound } = useCurrentRound();
+  const { exhangeableCards, setExhangeableCards } = useExhangeableCards();
   
   const { playerList, setPlayerList } = usePlayerList();
   const { playerId, setPlayerId} = usePlayerId();
@@ -48,6 +52,7 @@ function GamePage({ currentPlayer }) {
   const {pos, setPos} = usePos([]);
   const {options, setOptions} = useOptions('');
   const {choice, setChoice} = useChoice(0);
+
   const {chosenResource, setChosenResource} = useChosenResource('');
   const {timing, setTiming} = useTiming('');
 
@@ -81,12 +86,8 @@ function GamePage({ currentPlayer }) {
       webSocketFactory: () => socket,
       onConnect: (frame) => {
         console.log('Connected: ' + frame);
-        client.subscribe('/topic/game', (message) => {
-          handleGameState(JSON.parse(message.body));
-        });
-
         client.subscribe(`/topic/room/1`, (message) => {
-          handleGameState2(JSON.parse(message.body));
+          handleGameState(JSON.parse(message.body));
         });
 
         setStompClient(client);
@@ -132,21 +133,27 @@ function GamePage({ currentPlayer }) {
   }; 
 
   // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
+  // 클릭된 액션 카드 칸 정보 받아오는 함수
   const handleGameState = (message) => {
-    console.log('/topic/game에서 받아오는 정보', message);
 
     if (message.playerId) {
       console.log('현재 차례인 플레이어 정보', message.playerId);
       setPlayerId(message.playerId);
       setFirstPlayer(message.playerId);
     }
-    if (message.availableCards) {
-      console.log('가능한 액션 카드 칸', message.availableCards);
+    
+    if (message.currentRound) {
+      console.log('현재 라운드', message.currentRound);
     }
-  };
 
-  // 클릭된 액션 카드 칸 정보 받아오는 함수
-  const handleGameState2 = (message) => {
+    // if (message.openCards) {
+    //   console.log('소유중인 카드들', message.openCards);
+    // }
+
+    // if (message.availableCards) {
+    //   console.log('소유중인 카드들 중 선택 가능', message.availableCards);
+    // }
+
     if (message.playerPositions) {
       console.log('플레이어 포지션', message.playerPositions);
       setPlayerPositions(message.playerPositions);
@@ -247,8 +254,6 @@ function GamePage({ currentPlayer }) {
         justifyContent="center"
         alignItems="center"
         >
-          <button id="startGameButton" onClick={startGame}>Start Game</button>
-          
           <DialogChoiceCard
               cardNumber={cardId}
               open={openChoice}
@@ -270,14 +275,16 @@ function GamePage({ currentPlayer }) {
           }}
         >
           <Grid container spacing={1}>
+            <Button id="startGameButton" onClick={startGame}>게임 시작 버튼</Button>
+          
             <Typography>플레이어 프로필 클릭시 개인보드와 자원보드가 변경됩니다.</Typography>
-            <ProfileCard playerNumber={1}  isFirstPlayer={firstPlayer === 1}/>
+            <ProfileCard playerNumber={1}  isFirstPlayer={firstPlayer === 1 ? true : false}/>
             <Typography>고도희</Typography>
-            <ProfileCard playerNumber={2}  isFirstPlayer={firstPlayer === 2}/>
+            <ProfileCard playerNumber={2}  isFirstPlayer={firstPlayer === 2 ? true : false}/>
             <Typography>정지윤</Typography>
-            <ProfileCard playerNumber={3}  isFirstPlayer={firstPlayer === 3}/>
+            <ProfileCard playerNumber={3}  isFirstPlayer={firstPlayer === 3 ? true : false}/>
             <Typography>김윤재</Typography>
-            <ProfileCard playerNumber={4}  isFirstPlayer={firstPlayer === 4}/>
+            <ProfileCard playerNumber={4}  isFirstPlayer={firstPlayer === 4 ? true : false}/>
             <Typography>이수빈</Typography>
 
             <MajorPopUp 
@@ -299,7 +306,11 @@ function GamePage({ currentPlayer }) {
           }}
         >
           <Grid container spacing={1}>
-            <CurrentBoard currentPlayer={currentPlayer} turnPlayer={playerId}/>
+            <CurrentBoard 
+              currentRound={currentRound}
+              currentPlayer={currentPlayer} 
+              turnPlayer={playerId}
+            />
           </Grid>
         </Box>
         <Box

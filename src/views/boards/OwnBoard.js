@@ -5,12 +5,13 @@ import OwnCard from '../cards/OwnCard';
 
 // 컨텍스트 불러오기
 import { useDeckCard1, useDeckCard2, useDeckCard3, useDeckCard4 } from '../../component/Context';
-import { useCardId, useCardType } from '../../component/Context';
+import { useCardId, useCardType, useExhangeableCards } from '../../component/Context';
 
 const OwnBoard = ({ currentPlayer }) => {
 
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();
+  const { exchangableCards, setExchangableCards} = useExhangeableCards();
 
   const { setDeckCard1 } = useDeckCard1();
   const { setDeckCard2 } = useDeckCard2();

@@ -24,6 +24,9 @@ export const ComponentProvider = ({ children }) => {
   const [chosenResource, setChosenResource] = useState('');
   const [timing, setTiming] = useState('');
   const [actionType, setActionType] = useState('');
+  const [currentRound, setCurrentRound] = useState('1');
+  const [availableCards, setAvailableCards] = useState([]);
+  const [exhangeableCards, setExhangeableCards] = useState([]);
 
   // 프론트 전용
   const [cardType, setCardType] = useState('');
@@ -51,6 +54,9 @@ export const ComponentProvider = ({ children }) => {
       chosenResource, setChosenResource,
       timing, setTiming,
       actionType, setActionType,
+      currentRound, setCurrentRound,
+      availableCards, setAvailableCards,
+      exhangeableCards, setExhangeableCards,
 
       cardType, setCardType, 
       clickedPlayer, setClickedPlayer, 
@@ -70,6 +76,15 @@ export const ComponentProvider = ({ children }) => {
 // 커스텀 훅
 
 // 초기화
+
+export const useExhangeableCards = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('exchangableCards must be used within a Provider');
+  }
+  return { exhangeableCards: context.exhangeableCards, setExhangeableCards: context.setExhangeableCards };
+};
+
 export const usePlayerList = () => {
   const context = useContext(Context);
   if (!context) {
@@ -96,6 +111,22 @@ export const usePlayerId = () => {
 };
 
 // 추가 요청
+export const useCurrentRound = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('currentRound must be used within a Provider');
+  }
+  return { currentRound: context.currentRound, setCurrentRound: context.setCurrentRound };
+};
+
+export const useAvailiableCards = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('availableCards must be used within a Provider');
+  }
+  return { availableCards: context.availableCards, setAvailableCards: context.setAvailableCards };
+};
+
 export const useFirstPlayer = () => {
   const context = useContext(Context);
   if (!context) {
