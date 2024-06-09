@@ -23,8 +23,8 @@ import DialogChoiceCard from './cards/DialogChoiceCard';
 
 // 컨텍스트 불러오기
 import { useAnimalType, useCardId, useCardType, useChoice, useChoiceType, useChosenResource, useOptions, usePlayer, usePositions, usePos, useTiming } from '../component/Context';
-import { usePlayerList, usePlayerId } from '../component/Context';
-import { usePlayerPostions } from '../component/ReceiveContext';
+import { usePlayerList, usePlayerId, useActionType } from '../component/Context';
+import { usePlayerPostions, useValidPostions } from '../component/ReceiveContext';
 
 function GamePage({ currentPlayer }) {
 
@@ -34,10 +34,12 @@ function GamePage({ currentPlayer }) {
   const { clickedPlayer, setClickedPlayer } = usePlayer(); // 프로필을 클릭한 사람
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();
+  const { actionType, setActionType } = useActionType();
   
   const { playerList, setPlayerList } = usePlayerList();
   const { playerId, setPlayerId} = usePlayerId();
   const { playerPositions, setPlayerPositions } = usePlayerPostions();
+  const { validPositions, setValidPositions } = useValidPostions();
   const { choiceType, setChoiceType } = useChoiceType();
 
   const {animalType, setAnimalType} = useAnimalType('');
@@ -172,9 +174,14 @@ function GamePage({ currentPlayer }) {
       setExchangeableCards(message.exchangeableCards);
     }
 
-    if (message.resources) {
-      console.log('플레이어 자원', message.resources);
-      setResources(message.resources);
+    if (message.validPositions) {
+      console.log('개인 보드 유효한 위치', message.validPositions);
+      setValidPositions(message.validPositions);
+    }
+
+    if (message.actionType) {
+      console.log('개인 보드 행동 타입', message.actionType);
+      setActionType(message.actionType);
     }
 
   };

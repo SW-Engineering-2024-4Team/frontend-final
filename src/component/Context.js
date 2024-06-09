@@ -22,6 +22,7 @@ export const ComponentProvider = ({ children }) => {
   const [choice, setChoice] = useState(0);
   const [chosenResource, setChosenResource] = useState('');
   const [timing, setTiming] = useState('');
+  const [actionType, setActionType] = useState('');
 
   // 프론트 전용
   const [cardType, setCardType] = useState('');
@@ -48,6 +49,7 @@ export const ComponentProvider = ({ children }) => {
       choice, setChoice,
       chosenResource, setChosenResource,
       timing, setTiming,
+      actionType, setActionType,
 
       cardType, setCardType, 
       clickedPlayer, setClickedPlayer, 
@@ -154,6 +156,14 @@ export const useTiming = () => {
     throw new Error('timing must be used within a Provider');
   }
   return { timing: context.timing, setTiming: context.setTiming };
+};
+
+export const useActionType = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('actionType must be used within a Provider');
+  }
+  return { actionType: context.actionType, setActionType: context.setActionType };
 };
 
 // 프론트 전용

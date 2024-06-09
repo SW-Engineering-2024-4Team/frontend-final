@@ -11,7 +11,15 @@ import CardActionArea from "@mui/material/CardActionArea";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
+import { useActionType } from '../../component/Context';
+import { useValidPostions } from '../../component/ReceiveContext';
+
 const PersonalBoard = ({ clickedPlayer }) => {
+
+  // GamePage에서 받아온 걸 저장한 변수 입니다. 주석 처리 해제후 변경해주세요.
+  // const { actionType, setActionType } = useActionType();
+  // const { validPositions, setValidPositions } = useValidPostions();
+
   const theme = useTheme();
   const initialPlotStatuses = Array(15).fill({ type: "none", level: 0 });
   initialPlotStatuses[5] = { type: "room", level: 1 };
