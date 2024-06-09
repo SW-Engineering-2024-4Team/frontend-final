@@ -22,7 +22,7 @@ import MajorPopUp from './MajorPopUp';
 import DialogChoiceCard from './cards/DialogChoiceCard';
 
 // 컨텍스트 불러오기
-import { useCardId, useCardType, usePlayer, useChoiceType } from '../component/Context';
+import { useAnimalType, useCardId, useCardType, useChoice, useChoiceType, useChosenResource, useOptions, usePlayer, usePositions, usePos, useTiming } from '../component/Context';
 import { usePlayerList, usePlayerId } from '../component/Context';
 import { usePlayerPostions } from '../component/ReceiveContext';
 
@@ -40,6 +40,13 @@ function GamePage({ currentPlayer }) {
   const { playerPositions, setPlayerPositions } = usePlayerPostions();
   const { choiceType, setChoiceType } = useChoiceType();
 
+  const {animalType, setAnimalType} = useAnimalType('');
+  const {positions, setPositions} = usePositions('');
+  const {pos, setPos} = usePos([]);
+  const {options, setOptions} = useOptions('');
+  const {choice, setChoice} = useChoice(0);
+  const {chosenResource, setChosenResource} = useChosenResource('');
+  const {timing, setTiming} = useTiming('');
 
     // 플레이어 리스트 초기화
     useEffect(() => {
@@ -210,6 +217,15 @@ function GamePage({ currentPlayer }) {
   const handleMajorClick = () => { setOpenMajor(true); }; 
   const handleMajorClose = () => { setOpenMajor(false); };
 
+  useEffect(() => {
+    if (stompClient && playerList.length === 4) {
+      console.log("useEffect: Calling startGame");
+      startGame();
+    }
+  }, [stompClient]);
+
+  console.log("Component rendered!"); // 렌더링 2번되는거 확인
+  
   return (
       <Grid 
         container

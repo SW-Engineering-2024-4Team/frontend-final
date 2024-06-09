@@ -39,9 +39,7 @@ export default function RoundCard({ cardNumber, playerNumber, onClick, isBack })
       <Card 
         sx={{
           maxWidth: 130,
-          borderRadius: 1,
-          transform: isBack ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          transition: 'transform 0.5s', borderRadius: '10px'
+          borderRadius: '10px',
         }}
         >
         <CardActionArea onClick={handleClick}>
@@ -61,7 +59,7 @@ export default function RoundCard({ cardNumber, playerNumber, onClick, isBack })
                   left: 0,
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
+                  // objectFit: 'cover',
                 }}
               />
             )}
