@@ -174,11 +174,6 @@ function GamePage({ currentPlayer }) {
     selectCard(cardNumber);
   };
 
-  // ** 라운드 카드 / 보드
-  // 0: 사람없음, 1~4: 플레이어 -> 6개 카드
-  const initialClickedRoundCards = [null, null, null, null, null, null];
-  const [clickedRoundCards, setClickedRoundCards] = useState(initialClickedRoundCards);
-  
   // 자원누적이 필요한 카드: 3 번
   const initialResourceRoundCards = [,,,1,,,];
   const [resourceRoundCards, setResourceRoundCards] = useState(initialResourceRoundCards);
@@ -189,12 +184,7 @@ function GamePage({ currentPlayer }) {
 
   // 라운드 카드 클릭시
   const handleRoundCardClick = (cardNumber) => {
-    selectCard(cardNumber);
-    setClickedRoundCards(prev => {
-      const newClickedRoundCards = [...prev];
-      newClickedRoundCards[cardNumber - 1] = currentPlayer;
-      return newClickedRoundCards;
-    });
+    selectCard(cardNumber+14);
   };
 
   // 선택 카드 팝업창 관리
@@ -295,7 +285,6 @@ function GamePage({ currentPlayer }) {
           <RoundBoard 
             currentPlayer={currentPlayer} 
             onClick={(cardNumber) => handleRoundCardClick(cardNumber)}
-            clickedRoundCards={clickedRoundCards}
             resourceRoundCards={resourceRoundCards}
             isBackRoundCards={isBackRoundCards}
           />

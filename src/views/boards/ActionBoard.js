@@ -39,7 +39,7 @@ export default function ActionBoard({ currentPlayer, onClick, resourceActionCard
     >
       
       <Grid container spacing={{ xs: 2, md: 3 }} columns={5}>
-        {playerPositions.slice(0,13).map((playerNumber, index) => (
+        {playerPositions.slice(0,14).map((playerNumber, index) => (
           <Grid item xs={3} sm={1} md={1} key={index}>
             <ActionCard
               cardNumber={index + 1}
