@@ -100,10 +100,6 @@ function GamePage({ currentPlayer }) {
     }
   };
 
-  useEffect(() => {
-    startGame(); // 컴포넌트가 렌더링될 때 자동으로 startGame 함수를 호출합니다.
-  }, []);
-
   // 선택한 카드 정보 보내는 함수
   const selectCard = (cardId) => {
     if (stompClient) {
@@ -181,6 +177,15 @@ function GamePage({ currentPlayer }) {
   const handleClick = () => { setOpen(true); }; 
   const handleClose = () => { setOpen(false); };
 
+  useEffect(() => {
+    if (stompClient && playerList.length === 4) {
+      console.log("useEffect: Calling startGame");
+      startGame();
+    }
+  }, [stompClient]);
+
+  console.log("Component rendered!"); // 렌더링 2번되는거 확인
+  
   return (
       <Grid 
         container
@@ -188,7 +193,7 @@ function GamePage({ currentPlayer }) {
         justifyContent="center"
         alignItems="center"
         >
-           {/* <button id="startGameButton" onClick={startGame}>Start Game</button> */}
+           <button id="startGameButton" onClick={startGame}>Start Game</button>
            <button onClick={handleClick}>
             ChoiceCard
             <DialogChoiceCard
