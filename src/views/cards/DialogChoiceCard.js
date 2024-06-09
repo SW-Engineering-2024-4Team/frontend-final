@@ -7,7 +7,7 @@ import ChoiceCard from './ChoiceCard';
 // 컨텍스트 불러오기
 import { useCardId, useCardType, useChoice } from '../../component/Context';
 
-function DialogChoiceCard({ cardNumber, open, onClose, currentPlayer }) {
+function DialogChoiceCard({ cardNumber, open, onClose, currentPlayer, onClick }) {
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();
   const { choice, setChoice } = useChoice();
@@ -56,12 +56,16 @@ function DialogChoiceCard({ cardNumber, open, onClose, currentPlayer }) {
     }
   }, [cardNumber]);
 
-  const handleCardClick = (index) => {
+  const handleCardClick = ({ rtn, index }) => {
     console.log(`${currentPlayer}번 플레이어가 추가선택카드 ${cardNumber}-${index}번을 클릭했습니다.`);
 
     setChoice(rtn[index - 1]);
     setCardType('choice');
     handleClose();
+
+    if (typeof onClick === 'function') {
+      onClick(rtn, index);
+    }
   };
 
   const handleClose = () => {
@@ -85,7 +89,7 @@ function DialogChoiceCard({ cardNumber, open, onClose, currentPlayer }) {
             cardNumber={cardNumber}
             rtn={rtn[index - 1]}
             index={index}
-            onClick={() => handleCardClick(index)}
+            onClick={() => handleCardClick({ rtn, index })}
           />
         ))}
       </Box>

@@ -71,12 +71,10 @@ function GamePage({ currentPlayer }) {
       onConnect: (frame) => {
         console.log('Connected: ' + frame);
         client.subscribe('/topic/game', (message) => {
-          console.log('받은 상태 메시지: ' + message.body);
           handleGameState(JSON.parse(message.body));
         });
 
         client.subscribe(`/topic/room/1`, (message) => {
-          console.log('받은 추가 메시지들: ' + message.body);
           handleGameState2(JSON.parse(message.body));
         });
 
@@ -114,13 +112,7 @@ function GamePage({ currentPlayer }) {
 
   const selectChoice = (choiceType, choice) => {
     if (stompClient) {
-      let payload;
-      if (choiceType === 'AndOr') {
-        payload = { playerId: currentPlayer, choiceType: choiceType, choice: choice };
-      } else if (choiceType === 'Then' || choiceType === 'Or') {
-        const booleanChoice = choice === 0;
-        payload = { playerId: currentPlayer, choiceType: choiceType, choice: booleanChoice };
-      }
+      const payload = { playerId: currentPlayer, choiceType: choiceType, choice: choice };
       console.log('Selecting choice:', choiceType, choice);
       stompClient.publish({ destination: '/app/room/1/playerChoice', body: JSON.stringify(payload) });
     } else {
@@ -162,6 +154,20 @@ function GamePage({ currentPlayer }) {
       setPlayerId(message.playerId);
     }
 
+    if (message.resources) {
+      console.log('플레이어 자원', message.resources);
+      setResources(message.resources);
+    }
+
+    if (message.exchangeableCards) {
+      console.log('교환 가능한 카드', message.exchangeableCards);
+      setExchangeableCards(message.exchangeableCards);
+    }
+
+    if (message.resources) {
+      console.log('플레이어 자원', message.resources);
+      setResources(message.resources);
+    }
   };
 
   // ** 액션 카드 / 보드
@@ -193,8 +199,8 @@ function GamePage({ currentPlayer }) {
   const handleChoiceClose = () => { setOpenChoice(false); };
 
   // 선택 카드 클릭시 
-  const handleChoiceCardClick = ({ rtn, index }) => {
-    selectChoice(rtn[index]);
+  const handleChoiceCardClick = ({ choiceType, rtn, index }) => {
+    selectChoice(choiceType, rtn[index]);
   };
 
   // 주요 설비 카드 팝업창 관리
