@@ -8,7 +8,7 @@ import MajorCard from '../cards/MajorCard';
 import { useCardId, useCardType } from '../../component/Context';
 import { useDeckCard1, useDeckCard2, useDeckCard3, useDeckCard4 } from '../../component/Context';
 
-const MajorBoard = ({ currentPlayer, handleClick }) => {
+const MajorBoard = ({ currentPlayer }) => {
 
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();

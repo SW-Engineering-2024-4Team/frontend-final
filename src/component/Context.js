@@ -14,6 +14,7 @@ export const ComponentProvider = ({ children }) => {
   const [playerId, setPlayerId] = useState('');
 
   // 추가 요청
+  const [firstPlayer, setFirstPlayer] = useState('');
   const [animalType, setAnimalType] = useState('');
   const [positions, setPositions] = useState('');
   const [pos, setPos] = useState([]);
@@ -22,6 +23,7 @@ export const ComponentProvider = ({ children }) => {
   const [choice, setChoice] = useState(0);
   const [chosenResource, setChosenResource] = useState('');
   const [timing, setTiming] = useState('');
+  const [actionType, setActionType] = useState('');
 
   // 프론트 전용
   const [cardType, setCardType] = useState('');
@@ -48,9 +50,11 @@ export const ComponentProvider = ({ children }) => {
       choice, setChoice,
       chosenResource, setChosenResource,
       timing, setTiming,
+      actionType, setActionType,
 
       cardType, setCardType, 
       clickedPlayer, setClickedPlayer, 
+      firstPlayer, setFirstPlayer,
 
       deckCard1, setDeckCard1, 
       deckCard2, setDeckCard2, 
@@ -92,6 +96,14 @@ export const usePlayerId = () => {
 };
 
 // 추가 요청
+export const useFirstPlayer = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('firstPlayer must be used within a Provider');
+  }
+  return { firstPlayer: context.firstPlayer, setFirstPlayer: context.setFirstPlayer };
+};
+
 export const useAnimalType = () => {
   const context = useContext(Context);
   if (!context) {
@@ -137,7 +149,7 @@ export const useChoice = () => {
   if (!context) {
     throw new Error('choice must be used within a Provider');
   }
-  return { choice: context.choice, setChoiceType: context.setChoiceType };
+  return { choice: context.choice, setChoice: context.setChoice };
 };
 
 export const useChosenResource = () => {
@@ -154,6 +166,14 @@ export const useTiming = () => {
     throw new Error('timing must be used within a Provider');
   }
   return { timing: context.timing, setTiming: context.setTiming };
+};
+
+export const useActionType = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('actionType must be used within a Provider');
+  }
+  return { actionType: context.actionType, setActionType: context.setActionType };
 };
 
 // 프론트 전용
