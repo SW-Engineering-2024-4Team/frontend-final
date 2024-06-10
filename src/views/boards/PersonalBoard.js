@@ -10,15 +10,14 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { usePlayerId } from "../../component/Context";
+import { useActionType } from "../../component/Context";
+import { useValidPostions } from "../../component/ReceiveContext";
 
-import { useActionType } from '../../component/Context';
-import { useValidPostions } from '../../component/ReceiveContext';
-
-const PersonalBoard = ({ clickedPlayer }) => {
-
-  // GamePage에서 받아온 걸 저장한 변수 입니다. 주석 처리 해제후 변경해주세요.
-  // const { actionType, setActionType } = useActionType();
-  // const { validPositions, setValidPositions } = useValidPostions();
+const PersonalBoard = ({ currentPlayer, clickedPlayer, selecPositions }) => {
+  const { actionType, setActionType } = useActionType();
+  const { validPositions, setValidPositions } = useValidPostions();
+  const { playerId, setPlayerId } = usePlayerId();
 
   const theme = useTheme();
   const initialPlotStatuses = Array(15).fill({ type: "none", level: 0 });
@@ -33,15 +32,15 @@ const PersonalBoard = ({ clickedPlayer }) => {
   const [fenceCount, setFenceCount] = useState(0);
   const [fences, setFences] = useState(
     Array(3)
-      .fill()
+      .fill([])
       .map(() =>
         Array(5)
-          .fill()
-          .map(() => [true, true, true, true])
+          .fill([])
+          .map(() => [false, false, false, false])
       )
   );
-  const [actionType, setActionType] = useState(null);
-  const [validPositions, setValidPositions] = useState([]);
+  const [savedFences, setSavedFences] = useState(null); // 새로운 상태 추가
+
   const [selectedPositions, setSelectedPositions] = useState([]);
   const [color, setColor] = useState("yellow");
   const [client, setClient] = useState(null);
@@ -55,6 +54,10 @@ const PersonalBoard = ({ clickedPlayer }) => {
       },
       onConnect: () => {
         console.log("Connected");
+        stompClient.subscribe("/topic/room/1", (message) => {
+          const validPositionsMessage = JSON.parse(message.body);
+          handleValidPositions(validPositionsMessage);
+        });
       },
       onStompError: (frame) => {
         console.error("Broker reported error: " + frame.headers["message"]);
@@ -161,7 +164,7 @@ const PersonalBoard = ({ clickedPlayer }) => {
 
   const modifyPlot = (modification, x, y) => {
     const newPlotStatuses = [...plotStatuses];
-    const newFences = [...fences];
+
     const currentPlot = x * 5 + y;
     const currentStatus = newPlotStatuses[currentPlot];
 
@@ -205,7 +208,7 @@ const PersonalBoard = ({ clickedPlayer }) => {
       }
     } else if (modification === "barn") {
       newPlotStatuses[currentPlot] = { ...currentStatus, barn: true };
-    } else if (modification === "room") {
+    } else if (modification === "room" || modification === "house") {
       if (currentStatus.type === "none" && isAdjacent(currentPlot, "room")) {
         newPlotStatuses[currentPlot] = { type: "room", level: 1 };
       } else {
@@ -238,6 +241,7 @@ const PersonalBoard = ({ clickedPlayer }) => {
             newPlotStatuses[currentPlot] = { type: "fence", level: 0 };
             break;
           case "room":
+          case "house":
             newPlotStatuses[currentPlot] = { type: "room", level: 1 };
             break;
           case "barn":
@@ -256,16 +260,33 @@ const PersonalBoard = ({ clickedPlayer }) => {
     }
 
     setPlotStatuses(newPlotStatuses);
-    setFences(newFences);
-    calculateFenceCount(newPlotStatuses);
+    // calculateFenceCount(newPlotStatuses);
     updateCanBuildFence();
     updateCanBuildRoom();
     handleClose();
   };
-
   const handlePlotClick = (index) => {
     const x = Math.floor(index / 5);
     const y = index % 5;
+
+    console.log("Clicked position:", { x, y });
+    console.log("Current actionType:", actionType);
+    console.log("Valid positions:", validPositions);
+
+    // validPositions가 정의되지 않거나 빈 배열일 경우 처리
+    if (!validPositions || validPositions.length === 0) {
+      console.log("No valid positions available");
+      return;
+    }
+
+    // 액션 타입이 house인 경우 인접한 위치인지 확인
+    if (actionType === "house" && !isAdjacent(index, "room")) {
+      console.log("The selected position is not adjacent to a house:", {
+        x,
+        y,
+      });
+      return;
+    }
 
     const isValidPosition = validPositions.some(
       (pos) => pos.x === x && pos.y === y
@@ -288,6 +309,8 @@ const PersonalBoard = ({ clickedPlayer }) => {
         newSelectedPositions.push({ x, y });
         setSelectedPositions(newSelectedPositions);
       }
+    } else if (actionType === "house") {
+      modifyPlot("house", x, y);
     } else {
       if (actionType === "plow") {
         modifyPlot("plow", x, y);
@@ -296,35 +319,9 @@ const PersonalBoard = ({ clickedPlayer }) => {
       } else if (actionType === "barn") {
         modifyPlot("barn", x, y);
       }
-
-      const payload = {
-        playerId: 1,
-        x,
-        y,
-      };
-      console.log("Valid position selected:", x, y);
-      if (client && client.connected) {
-        client.publish({
-          destination: "app/room/1/receiveSelectedPosition",
-          body: JSON.stringify(payload),
-        });
-      }
     }
-  };
 
-  const handleSendFencePositions = () => {
-    const payload = {
-      playerId: 1,
-      positions: selectedPositions,
-    };
-    console.log("Sending fence positions:", selectedPositions);
-    if (client && client.connected) {
-      client.publish({
-        destination: "app/room/1/receiveSelectedPosition",
-        body: JSON.stringify(payload),
-      });
-    }
-    setSelectedPositions([]);
+    selecPositions(playerId, x, y);
   };
 
   const handleValidPositions = (validPositionsMessage) => {
@@ -335,30 +332,6 @@ const PersonalBoard = ({ clickedPlayer }) => {
     setValidPositions(validPositions);
     console.log("Valid positions updated:", validPositions);
   };
-
-  useEffect(() => {
-    const initialMessage = {
-      validPositions: [
-        { x: 2, y: 3 },
-        { x: 0, y: 0 },
-        { x: 2, y: 1 },
-        { x: 2, y: 4 },
-        { x: 1, y: 2 },
-        { x: 0, y: 2 },
-        { x: 0, y: 3 },
-        { x: 0, y: 4 },
-        { x: 1, y: 3 },
-        { x: 1, y: 1 },
-        { x: 0, y: 1 },
-        { x: 2, y: 2 },
-        { x: 1, y: 4 },
-      ],
-      playerId: "1",
-      actionType: "fence",
-    };
-
-    handleValidPositions(initialMessage);
-  }, []);
 
   useEffect(() => {
     updateCanBuildFence();
@@ -449,6 +422,7 @@ const PersonalBoard = ({ clickedPlayer }) => {
                 />
               )}
               {/* Render fences around the plot */}
+              {/* 
               {fences[x][y][0] && (
                 <Box
                   sx={{
@@ -512,7 +486,7 @@ const PersonalBoard = ({ clickedPlayer }) => {
                     borderColor: "black",
                   }}
                 />
-              )}
+              )} */}
             </CardActionArea>
           </Card>
         );
