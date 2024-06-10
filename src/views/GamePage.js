@@ -201,10 +201,7 @@ function GamePage({ currentPlayer }) {
   };
 
   // ** 액션 카드 / 보드
-  // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
-  const initialResourceActionCards = [2,1,null,1,null,1,null,null,null,null,1,1,1,null];
-  const [resourceActionCards, setResourceActionCards] = useState(initialResourceActionCards);
-
+ 
   // 액션 카드 클릭시 
   const handleActionCardClick = (cardNumber) => {
     selectCard(cardNumber);
@@ -327,7 +324,6 @@ function GamePage({ currentPlayer }) {
           <ActionBoard 
             currentPlayer={currentPlayer} 
             onClick={(cardNumber) => handleActionCardClick(cardNumber)}
-            resourceActionCards={resourceActionCards}
             
           />
           <RoundBoard 

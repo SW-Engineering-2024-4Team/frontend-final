@@ -9,11 +9,15 @@ import ActionCard from '../cards/ActionCard';
 import { useCardId, useCardType } from '../../component/Context';
 import { usePlayerPostions } from '../../component/ReceiveContext';
 
-export default function ActionBoard({ currentPlayer, onClick, resourceActionCards }) {
+export default function ActionBoard({ currentPlayer, onClick }) {
 
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();
   const { playerPositions, setPlayerPositions } = usePlayerPostions();
+
+  // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
+  const initialResourceActionCards = [1,2,null,1,null,1,null,null,null,null,1,1,1,null];
+  const [resourceActionCards, setResourceActionCards] = useState(initialResourceActionCards);
 
 
   const handleCardClick = (cardNumber) => {
@@ -21,6 +25,7 @@ export default function ActionBoard({ currentPlayer, onClick, resourceActionCard
 
     setCardId(cardNumber);
     setCardType('action');
+    setResourceActionCards([0,4,null,2,null,2,null,null,null,null,2,2,2,null]);
     
     if (typeof onClick === 'function') {
       onClick(cardNumber, currentPlayer);
