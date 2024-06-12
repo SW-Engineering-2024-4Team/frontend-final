@@ -8,11 +8,13 @@ import RoundCard from '../cards/RoundCard'
 
 // 컨텍스트 불러오기
 import { useCardId, useCardType } from '../../component/Context';
+import { usePlayerPostions } from '../../component/ReceiveContext';
 
-export default function RoundBoard({ currentPlayer, onClick, clickedRoundCards, resourceRoundCards, isBackRoundCards }) {
+export default function RoundBoard({ currentPlayer, onClick, resourceRoundCards, isBackRoundCards }) {
   
   const { cardId, setCardId } = useCardId();
   const { cardType, setCardType } = useCardType();
+  const { playerPositions, setPlayerPositions } = usePlayerPostions();
 
   const handleCardClick = (cardNumber) => {
     console.log(`${currentPlayer}번 플레이어가 라운드카드 ${cardNumber}번을 클릭했습니다.`);
@@ -36,7 +38,7 @@ export default function RoundBoard({ currentPlayer, onClick, clickedRoundCards, 
       sx={{ m: 0 }}
     >
       <Grid container direction="column" justifyContent="center" alignItems="flex-start" spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 8, md: 8 }}>
-        {clickedRoundCards.slice(0, 4).map((playerNumber, index) => (
+        {playerPositions.slice(14, 18).map((playerNumber, index) => (
           <Grid item xs={1} sm={1} md={1} key={index}>
             <RoundCard 
               cardNumber={index + 1} 
@@ -47,7 +49,7 @@ export default function RoundBoard({ currentPlayer, onClick, clickedRoundCards, 
             />
           </Grid>
         ))}
-        {clickedRoundCards.slice(4, 6).map((playerNumber, index) => (
+        {playerPositions.slice(18, 20).map((playerNumber, index) => (
           <Grid item xs={2} sm={2} md={8} key={index}>
             <RoundCard  
               cardNumber={index + 5} 

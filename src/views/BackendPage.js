@@ -55,69 +55,69 @@ export default function Home() {
 
   const connect = () => {
     const socket = new SockJS('http://localhost:8091/agricola-service');
-    const client = new Client({
-      webSocketFactory: () => socket,
-      onConnect: (frame) => {
-        console.log('Connected: ' + frame);
-        client.subscribe('/topic/game', (message) => {
-          console.log('Received message: ' + message.body);
-          handleGameState(JSON.parse(message.body));
-        });
+  //   const client = new Client({
+  //     webSocketFactory: () => socket,
+  //     onConnect: (frame) => {
+  //       console.log('Connected: ' + frame);
+  //       client.subscribe('/topic/game', (message) => {
+  //         console.log('Received message: ' + message.body);
+  //         handleGameState(JSON.parse(message.body));
+  //       });
 
-        client.subscribe(`/topic/room/${roomId}`, (message) => {
-          console.log('Received card options: ' + message.body);
-          handleCardOptions(JSON.parse(message.body));
-        });
+  //       client.subscribe(`/topic/room/${roomId}`, (message) => {
+  //         console.log('Received card options: ' + message.body);
+  //         handleCardOptions(JSON.parse(message.body));
+  //       });
 
-        client.subscribe('/topic/validPositions', (message) => {
-          console.log('Received valid positions: ' + message.body);
-          handleValidPositions(JSON.parse(message.body));
-        });
+  //       client.subscribe('/topic/validPositions', (message) => {
+  //         console.log('Received valid positions: ' + message.body);
+  //         handleValidPositions(JSON.parse(message.body));
+  //       });
 
-        client.subscribe('/topic/choiceRequest', (message) => {
-          console.log('Received choice request: ' + message.body);
-          handleChoiceRequest(JSON.parse(message.body));
-        });
+  //       client.subscribe('/topic/choiceRequest', (message) => {
+  //         console.log('Received choice request: ' + message.body);
+  //         handleChoiceRequest(JSON.parse(message.body));
+  //       });
 
-        client.subscribe('/topic/majorImprovementCards', (message) => {
-          console.log('Received major improvement cards: ' + message.body);
-          handleMajorImprovementCards(JSON.parse(message.body));
-        });
+  //       client.subscribe('/topic/majorImprovementCards', (message) => {
+  //         console.log('Received major improvement cards: ' + message.body);
+  //         handleMajorImprovementCards(JSON.parse(message.body));
+  //       });
 
-        client.subscribe('/topic/playerResources', (message) => {
-          console.log('Received player resources: ' + message.body);
-          handlePlayerResources(JSON.parse(message.body));
-        });
+  //       client.subscribe('/topic/playerResources', (message) => {
+  //         console.log('Received player resources: ' + message.body);
+  //         handlePlayerResources(JSON.parse(message.body));
+  //       });
 
-        client.subscribe('/topic/activeCards', (message) => {
-          console.log('Received active cards: ' + message.body);
-          handleActiveCards(JSON.parse(message.body));
-        });
+  //       client.subscribe('/topic/activeCards', (message) => {
+  //         console.log('Received active cards: ' + message.body);
+  //         handleActiveCards(JSON.parse(message.body));
+  //       });
 
-        client.subscribe('/topic/exchangeableCards', (message) => {
-          console.log('Received exchangeable cards info: ' + message.body);
-          handleExchangeableCards(JSON.parse(message.body));
-        });
+  //       client.subscribe('/topic/exchangeableCards', (message) => {
+  //         console.log('Received exchangeable cards info: ' + message.body);
+  //         handleExchangeableCards(JSON.parse(message.body));
+  //       });
 
-        setStompClient(client);
-      },
-    });
+  //       setStompClient(client);
+  //     },
+  //   });
 
-    client.activate();
-  };
+  //   client.activate();
+  // };
 
-  const startGame = () => {
-    if (stompClient) {
-      const payload = {
-        roomNumber: gameID,
-        players: playerList
-      };
-      console.log('Sending startGame message with payload:', payload);
-      stompClient.publish({ destination: '/app/room/1/start', body: JSON.stringify(payload) });
-    } else {
-      console.error('stompClient is not initialized');
-    }
-  };
+  // const startGame = () => {
+  //   if (stompClient) {
+  //     const payload = {
+  //       roomNumber: gameID,
+  //       players: playerList
+  //     };
+  //     console.log('Sending startGame message with payload:', payload);
+  //     stompClient.publish({ destination: '/app/room/1/start', body: JSON.stringify(payload) });
+  //   } else {
+  //     console.error('stompClient is not initialized');
+  //   }
+  // };
 
   const viewExchangeableCards = () => {
     if (stompClient && currentPlayerID !== null) {
@@ -129,10 +129,10 @@ export default function Home() {
     }
   };
 
-  const handleGameState = (gameState) => {
-    if (gameState.message) {
-      setGameState((prevState) => prevState + `<p>${gameState.message}</p>`);
-    }
+  // const handleGameState = (gameState) => {
+  //   if (gameState.message) {
+  //     setGameState((prevState) => prevState + `<p>${gameState.message}</p>`);
+  //   }
 
     if (gameState.currentRound) {
       const players = gameState.players.map(player => formatPlayer(player)).join('\n\n');
@@ -171,23 +171,23 @@ export default function Home() {
     setGameState((prevState) => prevState + `<div class="section-title">Select a Card</div>\n${cardListHtml}`);
   };
 
-  const selectCard = (cardId) => {
-    if (stompClient) {
-      const payload = { currentPlayer: playerId, cardNumber: cardId };
-      console.log('Selecting card with ID:', cardId);
-      stompClient.publish({ destination: '/app/room/1/actionCardClick', body: JSON.stringify(payload) });
-    } else {
-      console.error('stompClient is not initialized');
-    }
-  };
+  // const selectCard = (cardId) => {
+  //   if (stompClient) {
+  //     const payload = { currentPlayer: playerId, cardNumber: cardId };
+  //     console.log('Selecting card with ID:', cardId);
+  //     stompClient.publish({ destination: '/app/room/1/actionCardClick', body: JSON.stringify(payload) });
+  //   } else {
+  //     console.error('stompClient is not initialized');
+  //   }
+  // };
 
-  const sendCardId = () => {
-    if (cardId) {
-      selectCard(cardId);
-    } else {
-      alert('Please enter a card ID');
-    }
-  };  
+  // const sendCardId = () => {
+  //   if (cardId) {
+  //     selectCard(cardId);
+  //   } else {
+  //     alert('Please enter a card ID');
+  //   }
+  // };  
 
   const handleMajorImprovementCards = (message) => {
     const { playerId, majorImprovementCards } = message;
@@ -252,21 +252,21 @@ export default function Home() {
     }
   };
 
-  const selectChoice = (choiceType, choice) => {
-    if (stompClient) {
-      let payload;
-      if (choiceType === 'AndOr') {
-        payload = { playerId: currentPlayerID, choiceType: choiceType, choice: choice };
-      } else if (choiceType === 'Then' || choiceType === 'Or') {
-        const booleanChoice = choice === 0;
-        payload = { playerId: currentPlayerID, choiceType: choiceType, choice: booleanChoice };
-      }
-      console.log('Selecting choice:', choiceType, choice);
-      stompClient.publish({ destination: '/app/playerChoice', body: JSON.stringify(payload) });
-    } else {
-      console.error('stompClient is not initialized');
-    }
-  };
+  // const selectChoice = (choiceType, choice) => {
+  //   if (stompClient) {
+  //     let payload;
+  //     if (choiceType === 'AndOr') {
+  //       payload = { playerId: currentPlayerID, choiceType: choiceType, choice: choice };
+  //     } else if (choiceType === 'Then' || choiceType === 'Or') {
+  //       const booleanChoice = choice === 0;
+  //       payload = { playerId: currentPlayerID, choiceType: choiceType, choice: booleanChoice };
+  //     }
+  //     console.log('Selecting choice:', choiceType, choice);
+  //     stompClient.publish({ destination: '/app/playerChoice', body: JSON.stringify(payload) });
+  //   } else {
+  //     console.error('stompClient is not initialized');
+  //   }
+  // };
 
   const handleActiveCards = (message) => {
     const { playerId, majorImprovementCards } = message;

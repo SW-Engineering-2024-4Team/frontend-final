@@ -7,9 +7,10 @@ import Typography from '@mui/material/Typography';
 export default function ActionCard({ playerNumber, cardNumber, resource, onClick }) {
   
   // 카드가 클릭된 상태
-  const [isClicked, setIsClicked] = useState(playerNumber !== null && playerNumber != 0);
+  const [isClicked, setIsClicked] = useState(playerNumber !== null);
 
   const handleClick = () => {
+    // if (isClicked == false) setIsClicked(true);
     if (typeof onClick === 'function') {
       onClick(cardNumber);
     }

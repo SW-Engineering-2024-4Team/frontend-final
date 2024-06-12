@@ -7,6 +7,7 @@ import { Client } from '@stomp/stompjs';
 // MUI 불러오기
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 
 // 보드판 불러오기
@@ -22,9 +23,9 @@ import MajorPopUp from './MajorPopUp';
 import DialogChoiceCard from './cards/DialogChoiceCard';
 
 // 컨텍스트 불러오기
-import { useCardId, useCardType, usePlayer } from '../component/Context';
-import { usePlayerList, usePlayerId } from '../component/Context';
-import { usePlayerPostions } from '../component/ReceiveContext';
+import { useAnimalType, useCardId, useCardType, useChoice, useChoiceType, useChosenResource, useOptions, usePlayer, usePositions, usePos, useTiming } from '../component/Context';
+import { usePlayerList, usePlayerId, useActionType, useFirstPlayer, useCurrentRound, useExhangeableCards } from '../component/Context';
+import { usePlayerPostions, useValidPostions } from '../component/ReceiveContext';
 
 function GamePage({ currentPlayer }) {
 
@@ -32,12 +33,28 @@ function GamePage({ currentPlayer }) {
   const [gameState, setGameState] = useState('');
 
   const { clickedPlayer, setClickedPlayer } = usePlayer(); // 프로필을 클릭한 사람
-  const { cardId, setCardId } = useCardId();
+  const { cardId, setCardId } = useCardId(); // 클릭된 카드 아이디
+  
   const { cardType, setCardType } = useCardType();
+  const { actionType, setActionType } = useActionType();
+  const { firstPlayer, setFirstPlayer } = useFirstPlayer(); 
+  const { currentRound, setCurrentRound } = useCurrentRound();
+  const { exhangeableCards, setExhangeableCards } = useExhangeableCards();
   
   const { playerList, setPlayerList } = usePlayerList();
   const { playerId, setPlayerId} = usePlayerId();
+  const { playerPositions, setPlayerPositions } = usePlayerPostions();
+  const { validPositions, setValidPositions } = useValidPostions();
+  const { choiceType, setChoiceType } = useChoiceType();
 
+  const {animalType, setAnimalType} = useAnimalType('');
+  const {positions, setPositions} = usePositions('');
+  const {pos, setPos} = usePos([]);
+  const {options, setOptions} = useOptions('');
+  const {choice, setChoice} = useChoice(0);
+
+  const {chosenResource, setChosenResource} = useChosenResource('');
+  const {timing, setTiming} = useTiming('');
 
     // 플레이어 리스트 초기화
     useEffect(() => {
@@ -69,14 +86,8 @@ function GamePage({ currentPlayer }) {
       webSocketFactory: () => socket,
       onConnect: (frame) => {
         console.log('Connected: ' + frame);
-        client.subscribe('/topic/game', (message) => {
-          console.log('Received message: ' + message.body);
-          handleGameState(JSON.parse(message.body));
-        });
-
         client.subscribe(`/topic/room/1`, (message) => {
-          console.log('Received card options: ' + message.body);
-          handleGameState2(JSON.parse(message.body));
+          handleGameState(JSON.parse(message.body));
         });
 
         setStompClient(client);
@@ -111,50 +122,91 @@ function GamePage({ currentPlayer }) {
     }
   };
 
+  const selectChoice = (choiceType, choice) => {
+    if (stompClient) {
+      const payload = { playerId: currentPlayer, choiceType: choiceType, choice: choice };
+      console.log('Selecting choice:', choiceType, choice);
+      stompClient.publish({ destination: '/app/room/1/playerChoice', body: JSON.stringify(payload) });
+    } else {
+      console.error('stompClient is not initialized');
+    }
+  }; 
+
   // 현재 차례인 플레이어와 가능한 액션 카드 칸 정보 받아오는 함수
+  // 클릭된 액션 카드 칸 정보 받아오는 함수
   const handleGameState = (message) => {
+
     if (message.playerId) {
       console.log('현재 차례인 플레이어 정보', message.playerId);
       setPlayerId(message.playerId);
+      setFirstPlayer(message.playerId);
     }
-    if (message.availableCards) {
-      console.log('가능한 액션 카드 칸', message.availableCards);
+    
+    if (message.currentRound) {
+      console.log('현재 라운드', message.currentRound);
     }
-  };
 
-  // 클릭된 액션 카드 칸 정보 받아오는 함수
-  const handleGameState2 = (message) => {
+    // if (message.openCards) {
+    //   console.log('소유중인 카드들', message.openCards);
+    // }
+
+    // if (message.availableCards) {
+    //   console.log('소유중인 카드들 중 선택 가능', message.availableCards);
+    // }
+
     if (message.playerPositions) {
       console.log('플레이어 포지션', message.playerPositions);
-      setClickedActionCards(message.playerPositions.slice(0, 14));
-      setClickedRoundCards(message.playerPositions.slice(14));
-      console.log('액션 보드 플레이어 포지션', clickedActionCards);
-      console.log('라운드 보드 플레이어 포지션', clickedRoundCards);
+      setPlayerPositions(message.playerPositions);
     }
+
+    if (message.choiceType) {
+      console.log('선택 타입', message.choiceType);
+      setChoiceType(message.choiceType);
+      handleChoiceClick();
+    }
+
+    if (message.options) {
+      console.log('선택들', message.options);
+      // setOptions(message.options);
+    }
+
+    if (message.playerId) {
+      console.log('플레이어 아이디', message.playerId);
+      setPlayerId(message.playerId);
+    }
+
+    if (message.resources) {
+      console.log('플레이어 자원', message.resources);
+      setResources(message.resources);
+    }
+
+    if (message.exchangeableCards) {
+      console.log('교환 가능한 카드', message.exchangeableCards);
+      setExchangeableCards(message.exchangeableCards);
+    }
+
+    if (message.validPositions) {
+      console.log('개인 보드 유효한 위치', message.validPositions);
+      setValidPositions(message.validPositions);
+    }
+
+    if (message.actionType && message.playerId) {
+      console.log('개인 보드 행동 타입', message.actionType);
+      setActionType(message.actionType);
+      if(actionType == 'becomeFirstPlayer') {
+        setFirstPlayer(message.playerId);
+      }
+    }
+
   };
 
   // ** 액션 카드 / 보드
-  // 0: 사람없음, 1~4: 플레이어 -> 14개 카드
-  const initialClickedActionCards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  const [clickedActionCards, setClickedActionCards] = useState(initialClickedActionCards);
-  
-  // 자원누적이 필요한 카드: 1,2,4,6,11,12,13 번
-  const initialResourceActionCards = [,2,1,,1,,1,,,,,1,1,1,,];
-  const [resourceActionCards, setResourceActionCards] = useState(initialResourceActionCards);
-
+ 
   // 액션 카드 클릭시 
   const handleActionCardClick = (cardNumber) => {
     selectCard(cardNumber);
-    const newClickedActionCards = [...clickedActionCards];
-    newClickedActionCards[cardNumber - 1] = currentPlayer;
-    setClickedActionCards(newClickedActionCards);
   };
 
-  // ** 라운드 카드 / 보드
-  // 0: 사람없음, 1~4: 플레이어 -> 6개 카드
-  const initialClickedRoundCards = [2, 1, 3, 4, 0, 0];
-  const [clickedRoundCards, setClickedRoundCards] = useState(initialClickedRoundCards);
-  
   // 자원누적이 필요한 카드: 3 번
   const initialResourceRoundCards = [,,,1,,,];
   const [resourceRoundCards, setResourceRoundCards] = useState(initialResourceRoundCards);
@@ -165,18 +217,33 @@ function GamePage({ currentPlayer }) {
 
   // 라운드 카드 클릭시
   const handleRoundCardClick = (cardNumber) => {
-    selectCard(cardNumber);
-    const newClickedRoundCards = [...clickedRoundCards];
-    newClickedRoundCards[cardNumber - 1] = currentPlayer;
-    setClickedRoundCards(newClickedRoundCards);
+    selectCard(cardNumber+14);
   };
 
-  // ** 주요 설비 카드 / 보드
-  // 주요 설비 카드 팝업창 관리
-  const [open, setOpen] = React.useState(false);
-  const handleClick = () => { setOpen(true); }; 
-  const handleClose = () => { setOpen(false); };
+  // 선택 카드 팝업창 관리
+  const [openChoice, setOpenChoice] = useState(false);
+  const handleChoiceClick = () => { setOpenChoice(true); }; 
+  const handleChoiceClose = () => { setOpenChoice(false); };
 
+  // 선택 카드 클릭시 
+  const handleChoiceCardClick = (index) => {
+    selectChoice(choiceType, index);
+  };
+
+  // 주요 설비 카드 팝업창 관리
+  const [openMajor, setOpenMajor] = useState(false);
+  const handleMajorClick = () => { setOpenMajor(true); }; 
+  const handleMajorClose = () => { setOpenMajor(false); };
+
+  // useEffect(() => {
+  //   if (stompClient && playerList.length === 4) {
+  //     console.log("useEffect: Calling startGame");
+  //     startGame();
+  //   }
+  // }, [stompClient]);
+
+  // console.log("Component rendered!"); // 렌더링 2번되는거 확인
+  
   return (
       <Grid 
         container
@@ -184,18 +251,13 @@ function GamePage({ currentPlayer }) {
         justifyContent="center"
         alignItems="center"
         >
-           <button id="startGameButton" onClick={startGame}>Start Game</button>
-           <button onClick={handleClick}>
-            ChoiceCard
-            <DialogChoiceCard
-                cardNumber={cardId}
-                choiceType={"AndOr"}
-                open={open}
-                onClose={handleClose}
-                currentPlayer={currentPlayer}
-            />
-            </button>
-           <pre>{JSON.stringify(clickedActionCards, null, 2)}</pre>
+          <DialogChoiceCard
+              cardNumber={cardId}
+              open={openChoice}
+              onClose={handleChoiceClose}
+              currentPlayer={currentPlayer}
+              onClick={(index) => handleChoiceCardClick(index)}
+          />
         <Box
           height={1010}
           width={120}
@@ -210,17 +272,23 @@ function GamePage({ currentPlayer }) {
           }}
         >
           <Grid container spacing={1}>
+            <Button id="startGameButton" onClick={startGame}>게임 시작 버튼</Button>
+          
             <Typography>플레이어 프로필 클릭시 개인보드와 자원보드가 변경됩니다.</Typography>
-            <ProfileCard playerNumber={1}  isFirstPlayer={true}/>
+            <ProfileCard playerNumber={1}  isFirstPlayer={firstPlayer === 1 ? true : false}/>
             <Typography>고도희</Typography>
-            <ProfileCard playerNumber={2}  isFirstPlayer={false}/>
+            <ProfileCard playerNumber={2}  isFirstPlayer={firstPlayer === 2 ? true : false}/>
             <Typography>정지윤</Typography>
-            <ProfileCard playerNumber={3}  isFirstPlayer={false}/>
+            <ProfileCard playerNumber={3}  isFirstPlayer={firstPlayer === 3 ? true : false}/>
             <Typography>김윤재</Typography>
-            <ProfileCard playerNumber={4}  isFirstPlayer={false}/>
+            <ProfileCard playerNumber={4}  isFirstPlayer={firstPlayer === 4 ? true : false}/>
             <Typography>이수빈</Typography>
 
-            <MajorPopUp currentPlayer={currentPlayer} />
+            <MajorPopUp 
+              open={openMajor}
+              onClose={handleMajorClose}
+              currentPlayer={currentPlayer} 
+            />
           </Grid>
         </Box>
         <Grid>
@@ -235,7 +303,11 @@ function GamePage({ currentPlayer }) {
           }}
         >
           <Grid container spacing={1}>
-            <CurrentBoard currentPlayer={currentPlayer} turnPlayer={playerId}/>
+            <CurrentBoard 
+              currentRound={currentRound}
+              currentPlayer={currentPlayer} 
+              turnPlayer={playerId}
+            />
           </Grid>
         </Box>
         <Box
@@ -252,21 +324,21 @@ function GamePage({ currentPlayer }) {
           <ActionBoard 
             currentPlayer={currentPlayer} 
             onClick={(cardNumber) => handleActionCardClick(cardNumber)}
-            clickedActionCards={clickedActionCards}
-            resourceActionCards={resourceActionCards}
             
           />
           <RoundBoard 
             currentPlayer={currentPlayer} 
             onClick={(cardNumber) => handleRoundCardClick(cardNumber)}
-            clickedRoundCards={clickedRoundCards}
             resourceRoundCards={resourceRoundCards}
             isBackRoundCards={isBackRoundCards}
           />
         </Grid>
 
         <Grid container spacing={1} >
-          <PersonalBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
+          <PersonalBoard 
+            currentPlayer={currentPlayer} 
+            clickedPlayer={clickedPlayer} 
+          />
           <Grid> 
             <TriggerBoard currentPlayer={currentPlayer} clickedPlayer={clickedPlayer} />
             <OwnBoard currentPlayer={currentPlayer} />

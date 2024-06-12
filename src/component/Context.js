@@ -14,13 +14,19 @@ export const ComponentProvider = ({ children }) => {
   const [playerId, setPlayerId] = useState('');
 
   // 추가 요청
+  const [firstPlayer, setFirstPlayer] = useState('');
   const [animalType, setAnimalType] = useState('');
   const [positions, setPositions] = useState('');
   const [pos, setPos] = useState([]);
   const [choiceType, setChoiceType] = useState('');
+  const [options, setOptions] = useState('');
   const [choice, setChoice] = useState(0);
   const [chosenResource, setChosenResource] = useState('');
   const [timing, setTiming] = useState('');
+  const [actionType, setActionType] = useState('');
+  const [currentRound, setCurrentRound] = useState('1');
+  const [availableCards, setAvailableCards] = useState([]);
+  const [exhangeableCards, setExhangeableCards] = useState([]);
 
   // 프론트 전용
   const [cardType, setCardType] = useState('');
@@ -43,12 +49,18 @@ export const ComponentProvider = ({ children }) => {
       positions, setPositions,
       pos, setPos,
       choiceType, setChoiceType,
+      options, setOptions,
       choice, setChoice,
       chosenResource, setChosenResource,
       timing, setTiming,
+      actionType, setActionType,
+      currentRound, setCurrentRound,
+      availableCards, setAvailableCards,
+      exhangeableCards, setExhangeableCards,
 
       cardType, setCardType, 
       clickedPlayer, setClickedPlayer, 
+      firstPlayer, setFirstPlayer,
 
       deckCard1, setDeckCard1, 
       deckCard2, setDeckCard2, 
@@ -64,6 +76,15 @@ export const ComponentProvider = ({ children }) => {
 // 커스텀 훅
 
 // 초기화
+
+export const useExhangeableCards = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('exchangableCards must be used within a Provider');
+  }
+  return { exhangeableCards: context.exhangeableCards, setExhangeableCards: context.setExhangeableCards };
+};
+
 export const usePlayerList = () => {
   const context = useContext(Context);
   if (!context) {
@@ -90,6 +111,30 @@ export const usePlayerId = () => {
 };
 
 // 추가 요청
+export const useCurrentRound = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('currentRound must be used within a Provider');
+  }
+  return { currentRound: context.currentRound, setCurrentRound: context.setCurrentRound };
+};
+
+export const useAvailiableCards = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('availableCards must be used within a Provider');
+  }
+  return { availableCards: context.availableCards, setAvailableCards: context.setAvailableCards };
+};
+
+export const useFirstPlayer = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('firstPlayer must be used within a Provider');
+  }
+  return { firstPlayer: context.firstPlayer, setFirstPlayer: context.setFirstPlayer };
+};
+
 export const useAnimalType = () => {
   const context = useContext(Context);
   if (!context) {
@@ -122,12 +167,20 @@ export const useChoiceType = () => {
   return { choiceType: context.choiceType, setChoiceType: context.setChoiceType };
 };
 
+export const useOptions = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('options must be used within a Provider');
+  }
+  return { options: context.options, setOptions: context.setOptions };
+}
+
 export const useChoice = () => {
   const context = useContext(Context);
   if (!context) {
     throw new Error('choice must be used within a Provider');
   }
-  return { choice: context.choice, setChoiceType: context.setChoiceType };
+  return { choice: context.choice, setChoice: context.setChoice };
 };
 
 export const useChosenResource = () => {
@@ -144,6 +197,14 @@ export const useTiming = () => {
     throw new Error('timing must be used within a Provider');
   }
   return { timing: context.timing, setTiming: context.setTiming };
+};
+
+export const useActionType = () => {
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error('actionType must be used within a Provider');
+  }
+  return { actionType: context.actionType, setActionType: context.setActionType };
 };
 
 // 프론트 전용
